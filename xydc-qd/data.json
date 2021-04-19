@@ -1,0 +1,40 @@
+{
+	"code": 0,
+	"msg": "",
+	"count": 1,
+	"data": [{
+		"id": "1",
+		"username": "易升",
+		"email": "yisn@layui.com",
+		"sex": "男",
+		"city": "湖南",
+		"sign": "哈哈哈",
+		"experience": "116",
+		"ip": "192.168.1.1",
+		"logins": "108",
+		"joinTime": "2016-10-14"
+	},{
+		"id": "2",
+		"username": "金明涛",
+		"email": "jin@layui.com",
+		"sex": "男",
+		"city": "兰州",
+		"sign": "我爱兰州",
+		"experience": "118",
+		"ip": "192.168.101.1",
+		"logins": "108",
+		"joinTime": "2017-10-14"
+	},{
+		"id": "3",
+		"username": "尹娃",
+		"email": "yinwa@layui.com",
+		"sex": "男",
+		"city": "四川",
+		"sign": "四川爱我",
+		"experience": "99",
+		"ip": "168.192.2.1",
+		"logins": "108",
+		"joinTime": "2006-10-14"
+	}
+	]
+}

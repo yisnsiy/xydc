@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>xydc管理员界面</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
+</head>
+<body>
+
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">校园点餐后台管理</div>
+        <!-- 头部区域（可配合layui 已有的水平导航） -->
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="//tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" class="layui-nav-img">
+                    管理员
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">个人信息</a></dd>
+                    <dd><a href="">设置</a></dd>
+                    <dd><a href="">退出</a></dd>
+                </dl>
+            </li>
+            <!--<li class="layui-nav-item"><a href="">退出</a></li>-->
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/user/list" target="content_iFrm">用户管理</a></dd>
+                        <dd><a href="/store/list" target="content_iFrm">店铺管理</a></dd>
+                        <dd><a href="javascript:;">餐品管理</a></dd>
+                        <dd><a href="javascript:;">订单管理</a></dd>
+                        <dd><a href="javascript:;">食材管理</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">数据分析</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">店铺总销量</a></dd>
+                        <dd><a href="javascript:;">店铺总评分</a></dd>
+                        <dd><a href="">餐品销量</a></dd>
+                        <dd><a href="">餐品评分</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="javascript:;">消息提示</a></li>
+                <!--<li class="layui-nav-item"><a href="">the links</a></li>-->
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <iframe name="content_iFrm" frameborder="no" border="0" class="larry-iframe"
+                style="width: 100%;height: 100%;" src="/user/list"></iframe>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        Contact me:1769157748@qq.com
+    </div>
+</div>
+<script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+<script>
+    //JavaScript 代码区域
+    layui.use(['element', 'layer'], function(){
+        var element = layui.element;
+        var layer = layui.layer;
+
+    });
+</script>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?d214947968792b839fd669a4decaaffc";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+</body>
+</html>

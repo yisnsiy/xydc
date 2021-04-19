@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yisn.modules.mapper.UserMapper">
+
+    <resultMap id="xydcReserveUserList" type="com.yisn.modules.entity.User">
+        <result column = "user_id" property="userId" jdbcType="INTEGER"/>
+        <result column = "password" property="password" jdbcType="VARCHAR"/>
+        <result column = "nickname" property="nickname" jdbcType="VARCHAR"/>
+        <result column = "sex" property="sex" jdbcType="INTEGER"/>
+        <result column = "identity" property="identity" jdbcType="INTEGER"/>
+        <result column = "tel" property="tel" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="findAllUser" resultMap="xydcReserveUserList">
+        select * from t_user
+    </select>
+
+    <insert id="create" parameterType="com.yisn.modules.entity.User">
+        insert into t_user (user_id, password, nickname, sex, identity, tel)
+        values(#{userId}, #{password}, #{nickname}, #{sex}, #{identity}, #{tel})
+    </insert>
+
+    <select id="findByUserId" resultMap="xydcReserveUserList">
+        select * from t_user where user_id = #{userId}
+    </select>
+    
+    <delete id="deleteByUserId">
+        delete from t_user where user_id = #{userId}
+    </delete>
+
+    <update id="updateByUsesrId" parameterType="com.yisn.modules.entity.User">
+        update t_user set
+          password = #{password},
+          nickname = #{nickname},
+          sex = #{sex},
+          identity = #{identity},
+          tel = #{tel}
+        where user_id = #{userId}
+    </update>
+
+</mapper>

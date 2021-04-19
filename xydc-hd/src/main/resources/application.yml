@@ -7,3 +7,12 @@ spring:
     username: root
     password: root
     driverClassName: com.mysql.jdbc.Driver
+  thymeleaf:
+    cache: false #配置缓存清空，不用重启服务区也能看到静态资源的变化
+  devtools:
+    restart:
+      enabled: true #开启热部署
+
+#配置mapper配置的路径，天坑，classpath不是属性，而是值
+mybatis:
+  mapper-locations: com/yisn/modules/mapper/**/*.xml #mapping/*.xml ,com/yisn/modules/mapper/**/*.xml
