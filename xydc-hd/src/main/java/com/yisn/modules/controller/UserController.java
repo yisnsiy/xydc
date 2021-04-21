@@ -24,7 +24,7 @@ public class UserController {
 
 
     @RequestMapping("/list")
-    public String firstFunction() {
+    public String userList() {
         return "/user/list";
     }
 
@@ -64,6 +64,8 @@ public class UserController {
     @ResponseBody
     public Result create(@RequestBody User user) {
         System.out.println(user);
+        User u = userService.findByUserId(user.getUserId());
+        if(u != null) return new Result(Result.ERROR, "创建失败，该用户名已存在");
         userService.create(user);
         return new Result(Result.OK, "创建用户成功");
     }
