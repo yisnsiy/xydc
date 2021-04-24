@@ -1,5 +1,10 @@
 server:
   port: 8080
+  servlet:
+    multipart:
+      max-file-size: 7mb
+      max-request-size: 70mb
+      enabled: true
 
 spring:
   datasource:
@@ -16,3 +21,10 @@ spring:
 #配置mapper配置的路径，天坑，classpath不是属性，而是值
 mybatis:
   mapper-locations: com/yisn/modules/mapper/**/*.xml #mapping/*.xml ,com/yisn/modules/mapper/**/*.xml
+
+file:
+  kitchen: /kitchen
+  product: /product
+  licenses: /licenses
+  store: /store
+

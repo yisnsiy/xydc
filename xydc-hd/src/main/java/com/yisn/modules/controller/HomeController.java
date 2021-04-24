@@ -1,6 +1,8 @@
 package com.yisn.modules.controller;
 
+import com.yisn.modules.entity.Store;
 import com.yisn.modules.entity.User;
+import com.yisn.modules.service.StoreService;
 import com.yisn.modules.service.UserService;
 import com.yisn.modules.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +18,26 @@ public class HomeController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private StoreService storeService;
+
     @GetMapping("/home")
     public String home(@RequestParam(name = "userId", required = true)int userId, Model model) {
         User user = userService.findByUserId(userId);
         model.addAttribute("user", user);
-        System.out.println(user.getIdentity());
         if (user.getIdentity() == 0) return "adminHome";
-        else if (user.getIdentity() == 3) return "storeHome";
+        else if (user.getIdentity() == 3){ //是店主
+            Store store = storeService.findByUserId(userId);
+            boolean isCreateStore;
+            if (store == null || store.getStoreId() == 0) {
+                isCreateStore = false;
+            }else {
+                model.addAttribute("store", store);
+                isCreateStore = true;
+            }
+            model.addAttribute("isCreateStore", isCreateStore);
+            return "storeHome";
+        }
         return "";
     }
 
@@ -31,14 +46,6 @@ public class HomeController {
 
     @GetMapping("/register")
     public String register() {return "register";}
-    @PostMapping("/userRegister")
-    @ResponseBody
-    public Result userRegister(@RequestBody User user) {
-        User u = userService.findByUserId(user.getUserId());
-        if(u != null) return new Result(Result.ERROR, "该用户名已存在");
-        userService.create(user);
-        return new Result(Result.OK, "注册成功");
-    }
 
     @PostMapping("/vertifyUser")
     @ResponseBody

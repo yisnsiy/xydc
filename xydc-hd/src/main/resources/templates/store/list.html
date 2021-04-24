@@ -6,8 +6,17 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
     <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+
+    <style type="text/css">
+        .layui-table-cell {
+            text-align:center;
+            height: 80px;
+            white-space: normal;
+        }
+    </style>
+
 </head>
 <body>
 
@@ -26,40 +35,48 @@
 </script>
 
 
-<script th:src="@{/static/layui/layui.js}" charset="utf-8"></script>
+<script th:src="@{/layui/layui.js}" charset="utf-8"></script>
 <!-- 注意：如果你直接复制所有代码到本地，上述 JS 路径需要改成你本地的 -->
-
+<script id="displaySwitch" type="text/html">
+    <input type="checkbox"  name="display" storeId="{{d.storeId}}" lay-skin="switch" lay-text="是|否" lay-filter="displaySwitch" {{ d.display != '0' ? 'checked' : '' }}>
+</script>
+<script id="autoSwitch" type="text/html">
+    <input type="checkbox"  name="auto" storeId="{{d.storeId}}" lay-skin="switch" lay-text="是|否" lay-filter="autoSwitch" {{ d.auto == true ?'checked' : '' }}>
+</script>
 <script>
-    layui.use('table', function(){
-        var table = layui.table;
+    layui.use(['table', 'form'], function(){
+        var table = layui.table,
+            $ = layui.jquery,
+            form = layui.form;
 
         //温馨提示：默认由前端自动合计当前行数据。从 layui 2.5.6 开始： 若接口直接返回了合计行数据，则优先读取接口合计行数据。
         //详见：https://www.layui.com/doc/modules/table.html#totalRow
         table.render({
             elem: '#test'
-            ,url:'/test/table/demo1.json'
+            ,url:'/store/listJson'
             ,toolbar: '#toolbarDemo'
-            ,title: '用户数据表'
+            ,title: '店铺数据表'
             ,totalRow: true
             ,cols: [
                 [
                     {type: 'checkbox', fixed: 'left'}
-                    ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计'}
-                    ,{field:'username', title:'用户名', width:120, edit: 'text'}
-                    ,{field:'email', title:'邮箱', width:150, edit: 'text', templet: function(res){
-                        return '<em>'+ res.email +'</em>'
-                    }}
-                    ,{field:'experience', title:'积分', width:80, sort: true, totalRow: true}
-                    ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
-                    ,{field:'logins', title:'登入次数', width:100, sort: true, totalRow: true}
-                    ,{field:'sign', title:'签名'}
-                    ,{field:'city', title:'城市', width:100}
-                    ,{field:'ip', title:'IP', width:120}
-                    ,{field:'joinTime', title:'加入时间', width:120}
+                    ,{field:'storeId', title:'店铺ID', width:80, fixed: 'left', sort: true}
+                    ,{field:'userId', title:'所属用户ID', width: 80}
+                    ,{field:'display', title:'是否允许营业', width:110, templet: "#displaySwitch"}
+                    ,{field:'auto', title:'是否自动接单', width:110, templet: "#autoSwitch"}
+                    ,{field:'storeName', title:'店铺名', width:90}
+                    ,{field:'storeTel', title:'电话号码', width:90}
+                    ,{field:'storeAddress', title:'店铺地址', width:90}
+                    ,{field:'score', title:'店铺得分', width:80}
+                    ,{field:'storePicture', title:'店铺头像', width:120, templet:'<div><img src="{{d.storePicture}}"></div>'}
+                    ,{field:'licenses', title:'许可证', width:120, templet:'<div><img src="{{d.licenses}}" ></div>'}
+                    ,{field:'kitchenPicture', title:'厨房', width:120, templet:'<div><img src="{{d.kitchenPicture}}" ></div>'}
                     ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
                 ]
             ]
             ,page: true
+            ,limit: 4
+            ,limits: [4,5,6,7]
         });
 
         //工具栏事件
@@ -79,6 +96,123 @@
                     break;
             };
         });
+
+        //行双击展示详情
+        table.on('rowDouble(test)', function(obj) {
+            // 展示user详情
+            parent.layer.open({
+                type: 2,
+                title: '商铺详情',
+                area: ['1000px', '600px'],
+                content: '/store/detail?userId=' + obj.data.userId,
+                btn: '关闭',
+                btnAlign: 'c',
+                yes: function(){
+                    parent.layer.closeAll()
+                }
+            })
+        });
+
+        //工具条事件
+        table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var userId = obj.data.userId; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var storeId = obj.data.storeId;
+            if(layEvent === 'del'){ //删除
+                layer.confirm('真的删除吗', function(index){
+                    $.ajax({
+                        type: "get",
+                        url: "/store/delete?storeId="+storeId,
+                        dataType: "JSON",
+                        success: function(responseData) {
+                            if(responseData.code == 200) {
+                                layer.alert(responseData.message, {yes: function() {
+                                        obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                                        layer.closeAll();
+                                    }});
+                            }else {
+                                layer.alert("删除店铺失败");
+                            }
+                        }
+                    })
+                });
+            } else if(layEvent === 'edit'){ //编辑
+                //do something
+                parent.layer.open({
+                    type: 2,
+                    title: '修改用户信息',
+                    area: ['1000px', '600px'],
+                    content: '/store/edit?userId='+userId,
+                    btn: '关闭',
+                    btnAlign: 'c',
+                    yes: function(){
+                        parent.layer.closeAll()
+                    }
+                })
+                //同步更新缓存对应的值
+                // obj.update({
+                //     username: '123'
+                //     ,title: 'xxx'
+                // });
+            }
+        });
+
+        //监听是否允许营业开关
+        form.on('switch(displaySwitch)', function (data) {
+            var checked = data.elem.checked;
+            var display;
+            var storeId = data.elem.attributes['storeId'].nodeValue;
+            if(checked == true) display = 1;
+            else display = 0;
+            console.log(storeId)
+            console.log(display);
+
+            $.ajax({
+                type: "post",
+                url: "/store/statusChange",
+                data: JSON.stringify({storeId: storeId, display: display, id: 1}),
+                contentType : "application/json",
+                dataType: "JSON",
+                success: function(responseData) {
+                    console.log(responseData)
+                    if(responseData.code == 200) {
+                        layer.msg(responseData.message);
+                        //    插入数据失败
+                    }else {
+                        layer.msg("更新信息失败");
+                        // data.elem.checked = !checked;
+                    }
+                }
+            });
+            form.render();
+
+
+        })
+        //监听是否自动接单开关
+        form.on('switch(autoSwitch)', function (data) {
+            var auto = data.elem.checked;
+            var storeId = data.elem.attributes['storeId'].nodeValue;
+            console.log(storeId)
+            console.log(auto)
+
+            $.ajax({
+                type: "post",
+                url: "/store/statusChange",
+                data: JSON.stringify({storeId: storeId, auto: auto, id: 2}),
+                contentType : "application/json",
+                dataType: "JSON",
+                success: function(responseData) {
+                    console.log(responseData)
+                    if(responseData.code == 200) {
+                        layer.msg(responseData.message);
+                        //    插入数据失败
+                    }else {
+                        layer.msg("更新信息失败");
+                    }
+                }
+            })
+        })
+
     });
 </script>
 

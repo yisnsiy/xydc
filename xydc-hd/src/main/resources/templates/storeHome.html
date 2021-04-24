@@ -17,7 +17,7 @@
 
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
-        <div class="layui-logo">[[${user.nickname}]]校园点餐后台管理</div>
+        <div class="layui-logo">[[${user.nickname}]]-后台管理</div>
         <!-- 头部区域（可配合layui 已有的水平导航） -->
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
@@ -27,6 +27,7 @@
                 </a>
                 <dl class="layui-nav-child">
                     <dd><a href="">个人信息</a></dd>
+                    <dd><a href="javascript:jump();">店铺信息</a></dd>
                     <dd><a href="/login">退出</a></dd>
                 </dl>
             </li>
@@ -38,22 +39,20 @@
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree" lay-filter="test">
                 <li class="layui-nav-item layui-nav-itemed">
-                    <a class="" href="javascript:;">管理</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="/user/list" target="content_iFrm">用户管理</a></dd>
-                        <dd><a href="/store/list" target="content_iFrm">店铺管理</a></dd>
-                        <dd><a href="javascript:;">餐品管理</a></dd>
-                        <dd><a href="javascript:;">订单管理</a></dd>
-                        <dd><a href="javascript:;">食材管理</a></dd>
-                    </dl>
+                    <a class="" href="javascript:;">餐品管理</a>
+                    <!--<dl class="layui-nav-child">-->
+                        <!--<dd><a href="/user/list" target="content_iFrm">用户管理</a></dd>-->
+                        <!--<dd><a href="/store/list" target="content_iFrm">店铺管理</a></dd>-->
+                        <!--<dd><a href="javascript:;">餐品管理</a></dd>-->
+                        <!--<dd><a href="javascript:;">订单管理</a></dd>-->
+                        <!--<dd><a href="javascript:;">食材管理</a></dd>-->
+                    <!--</dl>-->
                 </li>
                 <li class="layui-nav-item">
                     <a href="javascript:;">数据分析</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">店铺总销量</a></dd>
-                        <dd><a href="javascript:;">店铺总评分</a></dd>
-                        <dd><a href="">餐品销量</a></dd>
-                        <dd><a href="">餐品评分</a></dd>
+                        <dd><a href="javascript:;">餐品销量</a></dd>
+                        <dd><a href="javascript:;">餐品评分</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item"><a href="javascript:;">消息提示</a></li>
@@ -63,23 +62,57 @@
     </div>
 
     <div class="layui-body">
-        <iframe name="content_iFrm" frameborder="no" border="0" class="larry-iframe"
-                style="width: 100%;height: 100%;" src="/user/list"></iframe>
+        <!--<iframe name="content_iFrm" frameborder="no" border="0" class="larry-iframe"-->
+                <!--style="width: 100%;height: 100%;" src="/user/list"></iframe>-->
     </div>
 
     <div class="layui-footer">
         <!-- 底部固定区域 -->
+        <a id = "alert"></a>
         Contact me:1769157748@qq.com
     </div>
 </div>
 <script th:src="@{/layui/layui.js}" charset="utf-8"></script>
 <script>
     //JavaScript 代码区域
+    // var $;
     layui.use(['element', 'layer'], function(){
-        var element = layui.element;
-        var layer = layui.layer;
+        var element = layui.element,
+            layer = layui.layer,
+            $ = layui.jquery;
+
+
 
     });
+
+    function jump() {
+        var isCreateStore = [[${isCreateStore}]];
+        if(isCreateStore == false) { //没有创建店铺，先去创建店铺
+            layer.open({
+                type: 2,
+                title: '创建店铺',
+                area: ['1000px', '600px'],
+                content: '/store/add?userId='+[[${user.userId}]],
+                btn: '关闭',
+                btnAlign: 'c',
+                yes: function(){
+                    layer.closeAll()
+                }
+            })
+        }else { //创建了店铺，修改店铺信息
+            layer.open({
+                type: 2,
+                title: '更改店铺信息',
+                area: ['1000px', '600px'],
+                content: '/store/edit?userId='+[[${user.userId}]],
+                btn: '关闭',
+                btnAlign: 'c',
+                yes: function(){
+                    layer.closeAll()
+                }
+            })
+        }
+    }
 </script>
 <script>
     var _hmt = _hmt || [];

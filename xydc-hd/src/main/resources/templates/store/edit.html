@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+
+    <style>
+        img {width: 130px; height: 130px; margin-left:20px; margin-bottom:20px;}
+    </style>
+</head>
+<body>
+
+
+
+<br>
+<!--<div style="width: 600px; position: relative; left:30%;">-->
+    <form class="layui-form" action="" lay-filter="example">
+        <input type="hidden" name="storeId" th:value="${store.storeId}">
+        <input type="hidden" name="userId" th:value="${store.userId}">
+        <div class="layui-form-item">
+            <label class="layui-form-label">店铺名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="storeName" th:value="${store.storeName}" lay-verify="required" autocomplete="off" placeholder="请输入用户名" class="layui-input">
+            </div>
+
+            <label class="layui-form-label">电话号码</label>
+            <div class="layui-input-inline">
+                <input type="text" name="storeTel" th:value="${store.storeTel}" lay-verify="required|number" autocomplete="off" placeholder="请输入用户名" class="layui-input">
+            </div>
+
+            <label class="layui-form-label">店铺地址</label>
+            <div class="layui-input-inline">
+                <input type="text" name="storeAddress" th:value="${store.storeAddress}" lay-verify="required" autocomplete="off" placeholder="请输入用户名" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item" th:style="${store.display}==0?'display:none':''">
+            <label class="layui-form-label">营业</label>
+            <div class="layui-input-inline">
+                <input type="checkbox" name="display" id="displaySwitch" lay-skin="switch" lay-text="开张|歇业">
+            </div>
+
+            <label class="layui-form-label">自动接单</label>
+            <div class="layui-input-inline">
+                <input type="checkbox" name="auto" id="autoSwitch" lay-skin="switch" lay-text="是|否">
+            </div>
+
+            <label class="layui-form-label">评分</label>
+            <div class="layui-input-inline">
+                <input type="text" name="score" th:value="${store.score}" lay-verify="required" readonly="readonly" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <input type="hidden" name="storePicture" class="storePicture" value="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">照片</label>
+            <!--<div class="layui-inline">-->
+            <div class="layui-upload">
+                <button type="button" class="layui-btn" id="test1">上传店铺头像</button>
+                <button type="button" class="layui-btn layui-btn-warm" id="sure1" style="display: none">确认上传</button>
+                <div class="layui-upload-list">
+                    <img class="layui-upload-img" id="demo1" src="/images/bg.jpg" style="border-radius:50%;margin-left: 105px;">
+                    <p id="demoText1"></p>
+                </div>
+            </div>
+            <!--</div>-->
+        </div>
+
+        <input type="hidden" name="licenses" class="licenses" value="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">许可证</label>
+            <!--<div class="layui-inline">-->
+            <div class="layui-upload">
+                <button type="button" class="layui-btn" id="test2">上传许可证</button>
+                <button type="button" class="layui-btn layui-btn-warm" id="sure2" style="display: none">确认上传</button>
+                <div class="layui-upload-list">
+                    <img class="layui-upload-img" id="demo2" src="/images/bg.jpg" style="border-radius:50%;margin-left: 105px;">
+                    <p id="demoText2"></p>
+                </div>
+            </div>
+            <!--</div>-->
+        </div>
+
+        <input type="hidden" name="kitchenPicture" class="kitchenPicture" value="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">厨房</label>
+            <!--<div class="layui-inline">-->
+            <div class="layui-upload">
+                <button type="button" class="layui-btn" id="test3">上传厨房照片</button>
+                <button type="button" class="layui-btn layui-btn-warm" id="sure3" style="display: none">确认上传</button>
+                <div class="layui-upload-list">
+                    <img class="layui-upload-img" id="demo3" src="/images/bg.jpg" style="border-radius:50%;margin-left: 105px;">
+                    <p id="demoText3"></p>
+                </div>
+            </div>
+            <!--</div>-->
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">更新信息</button>
+            </div>
+        </div>
+    </form>
+<!--</div>-->
+<script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述 JS 路径需要改成你本地的 -->
+<script th:inline="javascript">
+    layui.use(['form', 'upload'], function(){
+        var form = layui.form,
+            $ = layui.jquery,
+            upload = layui.upload;
+
+        // 先将数据库的数据填上去，
+        //初始化图片
+        var storePicture = [[${store.storePicture}]];
+        var licenses = [[${store.licenses}]];
+        var kitchenPicture = [[${store.kitchenPicture}]];
+        console.log(kitchenPicture);
+        if(storePicture != null && storePicture != "") {
+            $("#demo1").attr("src", storePicture);
+            $(".storePicture").val(storePicture);
+        }
+        if(licenses != null && licenses != "") {
+            $("#demo2").attr("src", licenses);
+            $(".licenses").val(licenses);
+        }
+        if(kitchenPicture != null && kitchenPicture != "") {
+            $("#demo3").attr("src", kitchenPicture);
+            $(".kitchenPicture").val(kitchenPicture);
+        }
+        //初始化开关
+        if([[${store.display}]] == 2) {
+            $('#displaySwitch').attr('checked', 'checked');
+        }
+        if([[${store.auto}]] == true) {
+            $('#autoSwitch').attr('checked', 'checked');
+        }
+
+        form.render('checkbox');
+
+        // 监听提交
+        form.on('submit(demo1)', function(data){
+            console.log(JSON.stringify(data.field));
+            if([[${store.display}]] != 0) {
+                if(data.field.display == "on") {
+                    data.field.display = 2;
+                }else{
+                    data.field.display = 1;
+                }
+            }else {
+                data.field.display = 0;
+            }
+            if(data.field.auto == "on") {
+                data.field.auto = 1;
+            }else{
+                data.field.auto = 0;
+            }
+            console.log(JSON.stringify(data.field));
+            $.ajax({
+                type: "post",
+                url: "/store/update",
+                data: JSON.stringify(data.field),
+                contentType : "application/json",
+                dataType: "JSON",
+                success: function(responseData) {
+                    console.log(responseData)
+                    if(responseData.code == 200) {
+                        //    插入数据成功
+                        layer.alert(responseData.message,{yes: function (){
+                                parent.layer.closeAll();
+                            }});
+                    }else {
+                        //    插入数据失败
+                        layer.alert("创建店铺失败");
+                    }
+                }
+            })
+            return false;
+        });
+
+        //普通图片上传
+        var uploadInst1 = upload.render({
+            elem: '#test1'
+            ,url: '/upload?id=1' //店铺头像上传
+            ,accept: 'images'
+            ,auto: false
+            ,bindAction: '#sure1'
+            ,size: 5 * 1025
+            ,choose: function (obj) {
+                // $('#sure1').attr("style", 'display:block;');
+                $('#sure1').show();
+                obj.preview(function(index, file, result){
+                    $('#demo1').attr('src', result); //图片链接（base64）
+                });
+            }
+            ,before: function(obj){
+            }
+            ,done: function(res){
+                //如果上传失败
+                if(res.code != 200){
+                    return layer.msg('店铺头像上传失败');
+                }
+                //上传成功
+                // layer.msg("上传成功");
+                $(".storePicture").val(res.data);
+                layer.msg("上传成功");
+                $('#sure1').hide();
+                console.log(res.data);
+            }
+            ,error: function(){
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText1');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function(){
+                    uploadInst.upload();
+                });
+            }
+        });
+
+        //普通图片上传
+        var uploadInst2 = upload.render({
+            elem: '#test2'
+            ,url: '/upload?id=2' //许可证上传
+            ,accept: 'images'
+            ,auto: false
+            ,bindAction: '#sure2'
+            ,size: 5 * 1025
+            ,choose: function (obj) {
+                $('#sure2').show();
+                obj.preview(function(index, file, result){
+                    $('#demo2').attr('src', result); //图片链接（base64）
+                });
+            }
+            ,before: function(obj){
+            }
+            ,done: function(res){
+                //如果上传失败
+                if(res.code != 200){
+                    return layer.msg('许可证上传失败');
+                }
+                //上传成功
+                // layer.msg("许可证上传成功");
+                $(".licenses").val(res.data);
+                layer.msg("上传成功");
+                $('#sure2').hide();
+                console.log(res.data);
+            }
+            ,error: function(){
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText2');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function(){
+                    uploadInst.upload();
+                });
+            }
+        });
+        //普通图片上传
+        var uploadInst3 = upload.render({
+            elem: '#test3'
+            ,url: '/upload?id=3' //厨房上传
+            ,accept: 'images'
+            ,auto: false
+            ,bindAction: '#sure3'
+            ,size: 5 * 1025
+            ,choose: function (obj) {
+                $('#sure3').show();
+                obj.preview(function(index, file, result){
+                    $('#demo3').attr('src', result); //图片链接（base64）
+                });
+            }
+            ,before: function(obj){
+            }
+            ,done: function(res){
+                //如果上传失败
+                if(res.code != 200){
+                    return layer.msg('厨房照片上传失败');
+                }
+                //上传成功
+                // layer.msg("厨房照片上传成功");
+                $(".kitchenPicture").val(res.data);
+                layer.msg("上传成功");
+                $('#sure3').hide();
+                console.log(res.data);
+            }
+            ,error: function(){
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText3');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function(){
+                    uploadInst.upload();
+                });
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

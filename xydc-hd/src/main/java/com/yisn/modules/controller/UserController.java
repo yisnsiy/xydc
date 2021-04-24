@@ -1,26 +1,29 @@
 package com.yisn.modules.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.yisn.modules.entity.Store;
 import com.yisn.modules.entity.User;
+import com.yisn.modules.service.StoreService;
 import com.yisn.modules.service.UserService;
 import com.yisn.modules.utils.Result;
 import com.yisn.modules.utils.TableResult;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Controller
-@NoArgsConstructor
-@AllArgsConstructor
 @RequestMapping("user")
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private StoreService storeService;
 
 
     @RequestMapping("/list")
@@ -51,9 +54,9 @@ public class UserController {
     public TableResult getJsonData(@RequestParam(name = "page", defaultValue = "1", required = false) int pageNum,
                                          @RequestParam(name = "limit", defaultValue = "7", required = false) int pageSize) {
         TableResult tableResult = new TableResult();
-        tableResult.setCode(0);
         PageInfo<User> page = userService.findPaperByPage(pageNum, pageSize);
         List<User> userList = page.getList();
+        tableResult.setCode(0);
         tableResult.setCount(page.getTotal());
         tableResult.setData(userList);
         return tableResult;
@@ -63,9 +66,9 @@ public class UserController {
     @PostMapping("/create")
     @ResponseBody
     public Result create(@RequestBody User user) {
-        System.out.println(user);
-        User u = userService.findByUserId(user.getUserId());
+        User u = userService.findByUserId(Integer.valueOf(user.getUserId()));
         if(u != null) return new Result(Result.ERROR, "创建失败，该用户名已存在");
+        System.out.println(user);
         userService.create(user);
         return new Result(Result.OK, "创建用户成功");
     }

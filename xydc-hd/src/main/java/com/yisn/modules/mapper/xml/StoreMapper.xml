@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yisn.modules.mapper.StoreMapper">
+
+    <resultMap id="xydcReserveStoreList" type="com.yisn.modules.entity.Store">
+        <result column = "store_id" property="storeId" jdbcType="INTEGER"/>
+        <result column = "user_id" property="userId" jdbcType="INTEGER"/>
+        <result column = "display" property="display" jdbcType="INTEGER"/>
+        <result column = "auto" property="auto" jdbcType="BIT"/>
+        <result column = "store_name" property="storeName" jdbcType="VARCHAR"/>
+        <result column = "store_tel" property="storeTel" jdbcType="INTEGER"/>
+        <result column = "score" property="score" jdbcType="DOUBLE"/>
+        <result column = "store_address" property="storeAddress" jdbcType="VARCHAR"/>
+        <result column = "store_picture" property="storePicture" jdbcType="VARCHAR"/>
+        <result column = "licenses" property="licenses" jdbcType="VARCHAR"/>
+        <result column = "kitchen_picture" property="kitchenPicture" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="findAllStore" resultMap="xydcReserveStoreList">
+        select * from t_store
+    </select>
+
+    <insert id="create" parameterType="com.yisn.modules.entity.Store">
+        insert into t_store (store_id,user_id,display,auto,store_name,store_tel,score,store_address,store_picture,licenses,kitchen_picture)
+        values(#{storeId},#{userId}, #{display},#{auto},#{storeName},#{storeTel},#{score},#{storeAddress},#{storePicture},#{licenses},#{kitchenPicture})
+    </insert>
+
+    <select id="findByUserId" resultMap="xydcReserveStoreList">
+        select * from t_store
+        where user_id = #{userId}
+    </select>
+
+    <update id="displayChangeByStoreId">
+        update t_store set
+          display = #{display}
+        where store_id = #{storeId}
+    </update>
+
+    <update id="autoChangeByStoreId">
+        update t_store set
+          auto = #{auto}
+        where store_id = #{storeId}
+    </update>
+
+    <delete id="deleteByStoreId">
+        delete from t_store where store_id = #{storeId}
+    </delete>
+
+    <update id="update" parameterType="com.yisn.modules.entity.Store">
+        update t_store set
+          display = #{display},
+          auto = #{auto},
+          store_name = #{storeName},
+          store_tel = #{storeTel},
+          score = #{score},
+          store_address = #{storeAddress},
+          store_picture = #{storePicture},
+          licenses = #{licenses},
+          kitchen_picture = #{kitchenPicture}
+        where store_id = #{storeId}
+    </update>
+
+</mapper>
