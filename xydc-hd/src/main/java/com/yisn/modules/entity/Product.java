@@ -8,14 +8,17 @@ import lombok.Data;
 @Data
 public class Product {
     private int productId;
+    private int StoreId;
     private String productName;
     private String productPicture;
-    private String product_info;
+    private String productInfo;
     private String tag;
-    private int sell_num;
-    private boolean is_sell;
+    private int sellNum;
+    private int sell;
+    private double price;
     private double carbs;
     private double calorie;
     private double fat;
     private double protein;
+    private double weight;
 }

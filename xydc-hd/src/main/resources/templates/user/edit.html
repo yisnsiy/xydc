@@ -56,15 +56,16 @@
             </div>
         </div>
 
-        <div class="layui-form-item">
-            <label class="layui-form-label">身份</label>
-            <div class="layui-input-block">
-                <input type="radio" id="i_0" name="identity" value="0" title="管理员">
-                <input type="radio" id="i_1" name="identity" value="1" title="用户" checked="">
-                <input type="radio" id="i_2" name="identity" value="2" title="骑手">
-                <input type="radio" id="i_3" name="identity" value="3" title="店主">
-            </div>
-        </div>
+        <input type="hidden" name="identity" th:value="${user.identity}">
+        <!--<div class="layui-form-item" th:style="${user.identity}!=0?'display:none':''">-->
+            <!--<label class="layui-form-label">身份</label>-->
+            <!--<div class="layui-input-block">-->
+                <!--<input type="radio" id="i_0" name="identity" value="0" title="管理员">-->
+                <!--<input type="radio" id="i_1" name="identity" value="1" title="用户" checked="">-->
+                <!--<input type="radio" id="i_2" name="identity" value="2" title="骑手">-->
+                <!--<input type="radio" id="i_3" name="identity" value="3" title="店主">-->
+            <!--</div>-->
+        <!--</div>-->
 
         <div class="layui-form-item">
             <div class="layui-input-block">
@@ -85,10 +86,10 @@
         var identityOption = '[[${user.identity}]]';
         if(sexOption == 1) $('#sex_1').prop('checked', true);
         else $('#sex_0').prop('checked', true);
-        if(identityOption == 0) $('#i_0').prop('checked', true);
-        else if(identityOption == 1) $('#i_1').prop('checked', true);
-        else if(identityOption == 2) $('#i_2').prop('checked', true);
-        else if(identityOption == 3) $('#i_3').prop('checked', true);
+        // if(identityOption == 0) $('#i_0').prop('checked', true);
+        // else if(identityOption == 1) $('#i_1').prop('checked', true);
+        // else if(identityOption == 2) $('#i_2').prop('checked', true);
+        // else if(identityOption == 3) $('#i_3').prop('checked', true);
         form.render('radio');
 
         // 监听提交

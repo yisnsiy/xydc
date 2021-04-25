@@ -20,16 +20,21 @@
     <select id="findAllStore" resultMap="xydcReserveStoreList">
         select * from t_store
     </select>
-
-    <insert id="create" parameterType="com.yisn.modules.entity.Store">
-        insert into t_store (store_id,user_id,display,auto,store_name,store_tel,score,store_address,store_picture,licenses,kitchen_picture)
-        values(#{storeId},#{userId}, #{display},#{auto},#{storeName},#{storeTel},#{score},#{storeAddress},#{storePicture},#{licenses},#{kitchenPicture})
-    </insert>
+    
+    <select id="findByStoreId" resultMap="xydcReserveStoreList">
+        select * from t_store
+        where store_id = ${storeId}
+    </select>
 
     <select id="findByUserId" resultMap="xydcReserveStoreList">
         select * from t_store
         where user_id = #{userId}
     </select>
+
+    <insert id="create" parameterType="com.yisn.modules.entity.Store">
+        insert into t_store (store_id,user_id,display,auto,store_name,store_tel,score,store_address,store_picture,licenses,kitchen_picture)
+        values(#{storeId},#{userId}, #{display},#{auto},#{storeName},#{storeTel},#{score},#{storeAddress},#{storePicture},#{licenses},#{kitchenPicture})
+    </insert>
 
     <update id="displayChangeByStoreId">
         update t_store set

@@ -729,8 +729,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
           typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
         }
         ,error: function(e, msg){
-          that.errorView('数据接口请求异常：'+ msg);
-
+          // that.errorView('数据接口请求异常：'+ msg);
+          that.errorView('暂无数据');
           that.renderForm();
           that.setColsWidth();
           

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yisn.modules.mapper.ProductMapper">
+
+    <resultMap id="xydcReserveProductList" type="com.yisn.modules.entity.Product">
+        <result column = "product_id" property="productId" jdbcType="INTEGER"/>
+        <result column = "store_id" property="StoreId" jdbcType="INTEGER"/>
+        <result column = "product_name" property="productName" jdbcType="VARCHAR"/>
+        <result column = "product_picture" property="productPicture" jdbcType="VARCHAR"/>
+        <result column = "product_info" property="productInfo" jdbcType="VARCHAR"/>
+        <result column = "tag" property="tag" jdbcType="VARCHAR"/>
+        <result column = "sell_num" property="sellNum" jdbcType="INTEGER"/>
+        <result column = "sell" property="sell" jdbcType="INTEGER"/>
+        <result column = "carbs" property="carbs" jdbcType="DOUBLE"/>
+        <result column = "calorie" property="calorie" jdbcType="DOUBLE"/>
+        <result column = "fat" property="fat" jdbcType="DOUBLE"/>
+        <result column = "protein" property="protein" jdbcType="DOUBLE"/>
+        <result column = "price" property="price" jdbcType="DOUBLE"/>
+        <result column = "weight" property="weight" jdbcType="DOUBLE"/>
+    </resultMap>
+
+    <resultMap id="xydcReserveProductVOList" type="com.yisn.modules.vo.ProductVO">
+        <result column = "product_id" property="productId" jdbcType="INTEGER"/>
+        <result column = "store_id" property="StoreId" jdbcType="INTEGER"/>
+        <result column = "product_name" property="productName" jdbcType="VARCHAR"/>
+        <result column = "product_picture" property="productPicture" jdbcType="VARCHAR"/>
+        <result column = "product_info" property="productInfo" jdbcType="VARCHAR"/>
+        <result column = "tag" property="tag" jdbcType="VARCHAR"/>
+        <result column = "sell_num" property="sellNum" jdbcType="INTEGER"/>
+        <result column = "sell" property="sell" jdbcType="INTEGER"/>
+        <result column = "carbs" property="carbs" jdbcType="DOUBLE"/>
+        <result column = "calorie" property="calorie" jdbcType="DOUBLE"/>
+        <result column = "fat" property="fat" jdbcType="DOUBLE"/>
+        <result column = "protein" property="protein" jdbcType="DOUBLE"/>
+        <result column = "price" property="price" jdbcType="DOUBLE"/>
+        <result column = "weight" property="weight" jdbcType="DOUBLE"/>
+        <result column="store_name" property="storeName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="findAllProduct" resultMap="xydcReserveProductVOList">
+        select
+          p.product_id product_id,
+          p.store_id store_id,
+          p.product_name product_name,
+          p.product_picture product_picture,
+          p.product_info product_info,
+          p.tag tag,
+          p.sell_num sell_num,
+          p.sell sell,
+          p.carbs carbs,
+          p.calorie calorie,
+          p.fat fat,
+          p.protein protein,
+          p.price price,
+          p.weight weight,
+          s.store_name store_name
+        from t_product as p
+        left join t_store as s
+        on p.store_id = s.store_id
+    </select>
+
+    <insert id="create" parameterType="com.yisn.modules.entity.Product">
+        insert into t_product (product_id,store_id,product_name,product_picture,product_info,tag,sell_num,sell,carbs,calorie,fat,protein,price,weight)
+        values(#{productId},#{StoreId}, #{productName},#{productPicture},#{productInfo},#{tag},#{sellNum},#{sell},#{carbs},#{calorie},#{fat},#{protein},#{price},#{weight})
+    </insert>
+
+    <select id="findByStoreId" resultMap="xydcReserveProductList">
+        select * from t_product
+        where store_id = #{storeId}
+    </select>
+
+    <select id="findByProductId" resultMap="xydcReserveProductList">
+        select * from t_product
+        where product_id = #{productId}
+    </select>
+
+    <update id="sellChangeByProductId">
+        update t_product set
+          sell = #{sell}
+        where product_id = #{productId}
+    </update>
+
+    <delete id="deleteByProductId">
+        delete from t_product where product_id = #{productId}
+    </delete>
+
+    <update id="update" parameterType="com.yisn.modules.entity.Product">
+        update t_product set
+          product_name = #{productName},
+          product_picture = #{productPicture},
+          product_info = #{productInfo},
+          tag = #{tag},
+          sell_num = #{sellNum},
+          sell = #{sell},
+          carbs = #{carbs},
+          calorie = #{calorie},
+          fat = #{fat},
+          protein = #{protein},
+          price = #{price},
+          weight = #{weight}
+        where product_id = #{productId}
+    </update>
+
+</mapper>

@@ -20,4 +20,6 @@ public interface StoreService {
     void autoChangeByStoreId(int storeId, boolean auto);
 
     void deleteByStoreId(int storeId);
+
+    Store findeByStoreId(int storeId);
 }

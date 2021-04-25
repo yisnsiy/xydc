@@ -26,4 +26,6 @@ public interface StoreMapper {
                              @Param("auto") boolean auto);
 
     void deleteByStoreId(@Param("storeId")int storeId);
+
+    Store findByStoreId(@Param("storeId") int storeId);
 }

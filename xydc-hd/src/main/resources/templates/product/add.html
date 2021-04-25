@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+
+    <style>
+        img {width: 130px; height: 130px; margin-left:20px; margin-bottom:20px;}
+    </style>
+</head>
+<body>
+
+
+
+<br>
+<form class="layui-form" action="" lay-filter="example">
+    <input type="hidden" name="storeId" id="storeId" th:value="${store.storeId}">
+    <div class="layui-form-item">
+        <label class="layui-form-label">餐品名字</label>
+        <div class="layui-input-inline">
+            <input type="text" name="productName" lay-verify="required" autocomplete="off" placeholder="请输入食物名" class="layui-input">
+        </div>
+
+        <label class="layui-form-label">餐品标签</label>
+        <div class="layui-input-inline">
+            <input type="text" name="tag" autocomplete="off" placeholder="请输入食物标签" class="layui-input">
+        </div>
+
+        <label class="layui-form-label">介绍</label>
+        <div class="layui-input-inline">
+            <input type="text" name="productInfo" autocomplete="off" placeholder="请输入食物介绍" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">卡路里</label>
+        <div class="layui-input-inline">
+            <input type="text" name="calorie" lay-verify="required|number" autocomplete="off" placeholder="请输入卡路里含量" class="layui-input">
+        </div>
+
+        <label class="layui-form-label">碳水化合物</label>
+        <div class="layui-input-inline">
+            <input type="text" name="carbs" lay-verify="required|number" autocomplete="off" placeholder="请输入碳水化合物含量" class="layui-input">
+        </div>
+
+        <label class="layui-form-label">脂肪</label>
+        <div class="layui-input-inline">
+            <input type="text" name="fat" lay-verify="required|number" autocomplete="off" placeholder="请输入脂肪含量" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">蛋白质</label>
+        <div class="layui-input-inline">
+            <input type="text" name="protein" lay-verify="required|number" autocomplete="off" placeholder="请输入蛋白质含量" class="layui-input">
+        </div>
+
+        <label class="layui-form-label">重量</label>
+        <div class="layui-input-inline">
+            <input type="text" name="weight" lay-verify="required|number" autocomplete="off" placeholder="请输入预估重量" class="layui-input">
+        </div>
+
+        <label class="layui-form-label">价格</label>
+        <div class="layui-input-inline">
+            <input type="text" name="price" lay-verify="required|number" autocomplete="off" placeholder="请输入食物价格" class="layui-input">
+        </div>
+    </div>
+
+    <input type="hidden" name="productPicture" class="productPicture" value="">
+    <div class="layui-form-item">
+        <label class="layui-form-label">食物照片</label>
+        <!--<div class="layui-inline">-->
+        <div class="layui-upload">
+            <button type="button" class="layui-btn" id="test1">上传食物照片</button>
+            <button type="button" class="layui-btn layui-btn-warm" id="sure1" style="display: none">确认上传</button>
+            <div class="layui-upload-list">
+                <img class="layui-upload-img" id="demo1" src="/images/bg.jpg" style="border-radius:50%;margin-left: 105px;">
+                <p id="demoText1"></p>
+            </div>
+        </div>
+        <!--</div>-->
+    </div>
+
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述 JS 路径需要改成你本地的 -->
+<script>
+    layui.use(['form', 'upload'], function(){
+        var form = layui.form,
+            $ = layui.jquery,
+            upload = layui.upload;
+
+        // 监听提交
+        form.on('submit(demo1)', function(data){
+            console.log(JSON.stringify(data.field))
+            // $.post("/user/create", JSON.stringify(data.field), function(){
+            //
+            // })
+            $.ajax({
+                type: "post",
+                url: "/product/create",
+                data: JSON.stringify(data.field),
+                contentType : "application/json",
+                dataType: "JSON",
+                success: function(responseData) {
+                    console.log(responseData)
+                    if(responseData.code == 200) {
+                    //    插入数据成功
+                        layer.alert(responseData.message,{yes: function (){
+                            parent.layer.closeAll();
+                        }});
+                    }else {
+                    //    插入数据失败
+                        layer.alert("创建餐品失败");
+                    }
+                }
+            })
+            return false;
+        });
+
+        //普通图片上传
+        var uploadInst1 = upload.render({
+            elem: '#test1'
+            ,url: '/upload?id=4' //餐品图片上传
+            ,accept: 'images'
+            ,auto: false
+            ,bindAction: '#sure1'
+            ,size: 5 * 1025
+            ,choose: function (obj) {
+                $('#sure1').show();
+                obj.preview(function(index, file, result){
+                    $('#demo1').attr('src', result); //图片链接（base64）
+                });
+            }
+            ,before: function(obj){
+            }
+            ,done: function(res){
+                //如果上传失败
+                if(res.code != 200){
+                    return layer.msg('店铺头像上传失败');
+                }
+                //上传成功
+                // layer.msg("上传成功");
+                $(".productPicture").val(res.data);
+                layer.msg("上传成功");
+                $('#sure1').hide();
+                console.log(res.data);
+            }
+            ,error: function(){
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText1');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function(){
+                    uploadInst.upload();
+                });
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

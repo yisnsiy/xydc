@@ -26,7 +26,7 @@
                     [[${user.nickname}]]
                 </a>
                 <dl class="layui-nav-child">
-                    <dd><a href="">个人信息</a></dd>
+                    <dd><a href="javascript:personalInfo()">个人信息</a></dd>
                     <dd><a href="javascript:jump();">店铺信息</a></dd>
                     <dd><a href="/login">退出</a></dd>
                 </dl>
@@ -39,14 +39,7 @@
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree" lay-filter="test">
                 <li class="layui-nav-item layui-nav-itemed">
-                    <a class="" href="javascript:;">餐品管理</a>
-                    <!--<dl class="layui-nav-child">-->
-                        <!--<dd><a href="/user/list" target="content_iFrm">用户管理</a></dd>-->
-                        <!--<dd><a href="/store/list" target="content_iFrm">店铺管理</a></dd>-->
-                        <!--<dd><a href="javascript:;">餐品管理</a></dd>-->
-                        <!--<dd><a href="javascript:;">订单管理</a></dd>-->
-                        <!--<dd><a href="javascript:;">食材管理</a></dd>-->
-                    <!--</dl>-->
+                    <a class="f1" target="content_iFrm">餐品管理</a>
                 </li>
                 <li class="layui-nav-item">
                     <a href="javascript:;">数据分析</a>
@@ -62,14 +55,13 @@
     </div>
 
     <div class="layui-body">
-        <!--<iframe name="content_iFrm" frameborder="no" border="0" class="larry-iframe"-->
-                <!--style="width: 100%;height: 100%;" src="/user/list"></iframe>-->
+        <iframe name="content_iFrm" frameborder="no" border="0" class="larry-iframe"
+                style="width: 100%;height: 100%;"></iframe>
     </div>
 
     <div class="layui-footer">
         <!-- 底部固定区域 -->
         <a id = "alert"></a>
-        Contact me:1769157748@qq.com
     </div>
 </div>
 <script th:src="@{/layui/layui.js}" charset="utf-8"></script>
@@ -81,10 +73,31 @@
             layer = layui.layer,
             $ = layui.jquery;
 
+        var isCreateStore = [[${isCreateStore}]];
+        if(isCreateStore == true) {
+            var src = "/product/list?userId=" + [[${user.userId}]];
+            $('.larry-iframe').attr('src', src);
+            $('.f1').attr('src', src);
+        }else {
+            $('#alert').prop('text', '请先在右上角填写店铺信息！！！');
+        }
 
 
     });
 
+    function personalInfo() {
+        layer.open({
+            type: 2,
+            title: '创建店铺',
+            area: ['1000px', '600px'],
+            content: '/user/edit?userId='+[[${user.userId}]],
+            btn: '关闭',
+            btnAlign: 'c',
+            yes: function(){
+                layer.closeAll()
+            }
+        })
+    }
     function jump() {
         var isCreateStore = [[${isCreateStore}]];
         if(isCreateStore == false) { //没有创建店铺，先去创建店铺

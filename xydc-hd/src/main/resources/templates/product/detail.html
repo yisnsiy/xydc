@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+
+    <style>
+        img {width: 130px; height: 130px; margin-left:20px; margin-bottom:20px;}
+    </style>
+</head>
+<body>
+
+
+
+<br>
+<form class="layui-form" action="" lay-filter="example">
+    <div class="layui-form-item">
+        <label class="layui-form-label">餐品名字</label>
+        <div class="layui-input-inline">
+            <input type="text" name="productName" th:value="${product.productName}" readonly lay-verify="required" autocomplete="off" placeholder="请输入食物名" class="layui-input">
+        </div>
+
+        <label class="layui-form-label">餐品标签</label>
+        <div class="layui-input-inline">
+            <input type="text" name="tag" th:value="${product.tag}" readonly autocomplete="off" placeholder="请输入食物标签" class="layui-input">
+        </div>
+
+        <label class="layui-form-label">介绍</label>
+        <div class="layui-input-inline">
+            <input type="text" name="productInfo" th:value="${product.productInfo}" readonly autocomplete="off" placeholder="请输入食物介绍" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+
+        <label class="layui-form-label">重量</label>
+        <div class="layui-input-inline">
+            <input type="text" name="weight" th:value="${product.weight}" readonly lay-verify="required|number" autocomplete="off" placeholder="请输入预估重量" class="layui-input">
+        </div>
+
+        <label class="layui-form-label">价格</label>
+        <div class="layui-input-inline">
+            <input type="text" name="price" th:value="${product.price}" readonly lay-verify="required|number" autocomplete="off" placeholder="请输入食物价格" class="layui-input">
+        </div>
+
+        <label class="layui-form-label">已售卖数量</label>
+        <div class="layui-input-inline">
+            <input type="text" name="sellNum" th:value="${product.sellNum}" readonly lay-verify="required|number" autocomplete="off" placeholder="请输入食物价格" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">是否上架</label>
+        <div class="layui-input-inline">
+            <input type="text" name="sellNum" th:value="${product.sell}==0?'待审核':(${product.sell}==1?'已下架':'已上架')"readonly lay-verify="required|number" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">食物照片</label>
+        <div class="layui-input-inline">
+            <img th:src="${product.productPicture}" onerror="this.src='/images/bg.jpg'">
+        </div>
+    </div>
+    <div id="main" style="width:800px; height:400px;">
+
+    </div>
+
+</form>
+<script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+<script th:src="@{/echarts.min.js}"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述 JS 路径需要改成你本地的 -->
+<script>
+    layui.use(['form', 'upload'], function(){
+        var form = layui.form,
+            $ = layui.jquery;
+    });
+</script>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+    var rate = [[${product.weight}]] / 100;
+    var calorie = ([[${product.calorie}]] * rate).toFixed(2);
+    var carbs = ([[${product.carbs}]] * rate).toFixed(2);
+    var fat = ([[${product.fat}]] * rate).toFixed(2);
+    var protein = ([[${product.protein}]] * rate).toFixed(2);
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '营养含量'
+        },
+        tooltip: {},
+        legend: {
+            data:['含量']
+        },
+        xAxis: {
+            data: ["卡路里","碳水化合物","脂肪","蛋白质"]
+        },
+        yAxis: {},
+        series: [{
+            name: '含量',
+            type: 'bar',
+            data: [calorie, carbs, fat, protein]
+        }]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+</script>
+
+</body>
+</html>

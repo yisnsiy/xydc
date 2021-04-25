@@ -26,7 +26,7 @@
                     [[${user.nickname}]]
                 </a>
                 <dl class="layui-nav-child">
-                    <dd><a href="">个人信息</a></dd>
+                    <dd><a href="javascript:personalInfo();">个人信息</a></dd>
                     <dd><a href="/login">退出</a></dd>
                 </dl>
             </li>
@@ -42,9 +42,8 @@
                     <dl class="layui-nav-child">
                         <dd><a href="/user/list" target="content_iFrm">用户管理</a></dd>
                         <dd><a href="/store/list" target="content_iFrm">店铺管理</a></dd>
-                        <dd><a href="javascript:;">餐品管理</a></dd>
+                        <dd><a th:href="@{'/product/list?userId='+${user.userId}}" target="content_iFrm">餐品管理</a></dd>
                         <dd><a href="javascript:;">订单管理</a></dd>
-                        <dd><a href="javascript:;">食材管理</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
@@ -64,7 +63,7 @@
 
     <div class="layui-body">
         <iframe name="content_iFrm" frameborder="no" border="0" class="larry-iframe"
-                style="width: 100%;height: 100%;" src="/store/list"></iframe>
+                style="width: 100%;height: 100%;" th:src="@{'/product/list?userId='+${user.userId}}"></iframe>
     </div>
 
     <div class="layui-footer">
@@ -76,10 +75,28 @@
 <script>
     //JavaScript 代码区域
     layui.use(['element', 'layer'], function(){
-        var element = layui.element;
-        var layer = layui.layer;
+        var element = layui.element,
+            layer = layui.layer,
+            $ = layui.jquery;
 
+        var src = "/product/list?userId=" + [[${user.userId}]];
+        $('.larry-iframe').prop('src')
     });
+
+    function personalInfo() {
+        layer.open({
+            type: 2,
+            title: '创建店铺',
+            area: ['1000px', '600px'],
+            content: '/user/edit?userId='+[[${user.userId}]],
+            btn: '关闭',
+            btnAlign: 'c',
+            yes: function(){
+                layer.closeAll()
+            }
+        })
+    }
+
 </script>
 <script>
     var _hmt = _hmt || [];
