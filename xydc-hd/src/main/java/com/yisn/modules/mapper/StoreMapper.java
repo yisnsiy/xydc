@@ -1,6 +1,7 @@
 package com.yisn.modules.mapper;
 
 import com.yisn.modules.entity.Store;
+import com.yisn.modules.vo.StoreVO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -28,4 +29,6 @@ public interface StoreMapper {
     void deleteByStoreId(@Param("storeId")int storeId);
 
     Store findByStoreId(@Param("storeId") int storeId);
+
+    List<StoreVO> findStoreWithProduct();
 }

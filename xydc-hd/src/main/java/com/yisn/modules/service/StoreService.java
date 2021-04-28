@@ -2,6 +2,9 @@ package com.yisn.modules.service;
 
 import com.github.pagehelper.PageInfo;
 import com.yisn.modules.entity.Store;
+import com.yisn.modules.vo.StoreVO;
+
+import java.util.List;
 
 /**
  * Created by yisn on 2021/04/21/14:20
@@ -22,4 +25,6 @@ public interface StoreService {
     void deleteByStoreId(int storeId);
 
     Store findeByStoreId(int storeId);
+
+    List<StoreVO> findStoreWithProduct();
 }

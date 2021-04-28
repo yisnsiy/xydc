@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yisn.modules.mapper.AddressMapper">
+
+    <resultMap id="xydcReserveAddressList" type="com.yisn.modules.entity.Address">
+        <result column = "address_id" property="addressId" jdbcType="INTEGER"/>
+        <result column = "user_id" property="userId" jdbcType="INTEGER"/>
+        <result column = "real_name" property="realName" jdbcType="VARCHAR"/>
+        <result column = "tel" property="tel" jdbcType="INTEGER"/>
+        <result column = "content" property="content" jdbcType="VARCHAR"/>
+        <result column = "def" property="def" jdbcType="BIT"/>
+    </resultMap>
+
+    <!--<select id="findAllUser" resultMap="xydcReserveUserList">-->
+        <!--select * from t_user-->
+    <!--</select>-->
+
+    <insert id="create" parameterType="com.yisn.modules.entity.Address">
+        insert into t_address (address_id, user_id, real_name, tel, content, def)
+        values(#{addressId}, #{userId}, #{realName}, #{tel}, #{content}, #{def})
+    </insert>
+
+    <select id="findAddressByUserId" resultMap="xydcReserveAddressList">
+        select * from t_address where user_id = #{userId}
+    </select>
+
+    <select id="getDefaultAddressId" resultType="int">
+        select * from t_address where def = 1
+    </select>
+
+    <delete id="deleteByAddressId">
+        delete from t_address where address_id = #{addressId}
+    </delete>
+
+    <update id="setDefault">
+        update t_address set
+          def = #{def}
+        where address_id = #{addressId}
+    </update>
+
+    <!--<update id="updateByUsesrId" parameterType="com.yisn.modules.entity.User">-->
+        <!--update t_user set-->
+          <!--password = #{password},-->
+          <!--nickname = #{nickname},-->
+          <!--sex = #{sex},-->
+          <!--identity = #{identity},-->
+          <!--tel = #{tel}-->
+        <!--where user_id = #{userId}-->
+    <!--</update>-->
+
+</mapper>

@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "个人界面",
+  "usingComponents": {
+    "mytabbar": "/components/mytabbar/mytabbar"
+  }
+}

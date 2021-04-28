@@ -1,0 +1,47 @@
+{
+  "description": "项目配置文件。",
+  "packOptions": {
+    "ignore": []
+  },
+  "setting": {
+    "urlCheck": false
+  },
+  "compileType": "miniprogram",
+  "libVersion": "",
+  "appid": "wxfe4e9d8c9fdb5c61",
+  "projectname": "xydc-wx",
+  "condition": {
+    "search": {
+      "current": -1,
+      "list": []
+    },
+    "conversation": {
+      "current": -1,
+      "list": []
+    },
+    "plugin": {
+      "current": -1,
+      "list": []
+    },
+    "game": {
+      "current": -1,
+      "list": []
+    },
+    "gamePlugin": {
+      "current": -1,
+      "list": []
+    },
+    "miniprogram": {
+      "current": -1,
+      "list": [
+        {
+          "id": 0,
+          "name": "pages/reserve/user/home",
+          "pathName": "pages/reserve/user/home",
+          "query": "",
+          "scene": null
+        }
+      ]
+    }
+  }
+}

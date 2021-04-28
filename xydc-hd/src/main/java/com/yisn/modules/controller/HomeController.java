@@ -53,19 +53,49 @@ public class HomeController {
         String msg = new String();
         int status = Result.OK;
         int data = 0;
+        String location = map.get("location");
         User user = userService.findByUserId(Integer.valueOf(map.get("userId")));
         if(!map.get("password").equals(user.getPassword())) {
             msg = "用户名或者密码不正确";
             status = Result.ERROR;
         }else{
+            status = Result.OK;
             data = user.getIdentity();
-            if(data == 1) msg = "用户请前往微信小程序登录";
-            else if(data == 2) msg = "骑手请前往微信小程序登录";
-            else if(data == 0) msg = "欢迎管理员登录";
-            else if(data == 3) msg = "欢迎店主登录";
-
-            if(data == 1 || data == 2) status = Result.ERROR;
+            if(data == 1) {
+                if (location != null && location.equals("wx")) {
+                    msg = "欢迎用户登录";
+                } else {
+                    status = Result.ERROR;
+                    msg = "用户请前往微信小程序登录";
+                }
+            }
+            else if(data == 2) {
+                if(location != null && location.equals("wx")) {
+                    msg = "欢迎骑手登录";
+                }else {
+                    status = Result.ERROR;
+                    msg = "骑手请前往微信小程序登录";
+                }
+            }
+            else if(data == 0) {
+                if(location == null || !location.equals("wx")) {
+                    msg = "欢迎管理员登录";
+                }
+                else{
+                    status = Result.ERROR;
+                    msg = "管理员请前往web端登录";
+                }
+            }
+            else if(data == 3) {
+                if(location == null || !location.equals("wx")) {
+                    msg = "欢迎店主登录";
+                }
+                else{
+                    status = Result.ERROR;
+                    msg = "店主请前往web端登录";
+                }
+            }
         }
-        return new Result(status, msg);
+        return new Result(status, msg, data);
     }
 }

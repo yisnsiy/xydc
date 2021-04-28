@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.yisn.modules.entity.Store;
 import com.yisn.modules.mapper.StoreMapper;
 import com.yisn.modules.service.StoreService;
+import com.yisn.modules.vo.StoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,5 +64,11 @@ public class StoreServiceImpl implements StoreService {
     public Store findeByStoreId(int storeId) {
         Store store = storeMapper.findByStoreId(storeId);
         return store;
+    }
+
+    @Override
+    public List<StoreVO> findStoreWithProduct() {
+        List<StoreVO> storeVOList = storeMapper.findStoreWithProduct();
+        return storeVOList;
     }
 }

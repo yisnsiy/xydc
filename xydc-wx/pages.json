@@ -1,0 +1,95 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path":"pages/index/index"
+			// "style": {
+			// 	"navigationBarTitleText": "登录页面"
+			// }
+		},
+		{
+			"path":"pages/reserve/user/home",
+			"style": {
+				"navigationBarTitleText": "商品展示"
+			}
+		},{
+			"path":"pages/reserve/user/order",
+			"style": {
+				"navigationBarTitleText": "订单"
+			}
+		},{
+			"path":"pages/reserve/user/info",
+			"style": {
+				"navigationBarTitleText": "个人界面"
+			}
+		},{
+			"path":"pages/reserve/carrier/home",
+			"style": {
+				"navigationBarTitleText": "抢单大厅"
+			}
+		},{
+			"path":"pages/reserve/carrier/order",
+			"style": {
+				"navigationBarTitleText": "订单"
+			}
+		},{
+			"path":"pages/reserve/carrier/info",
+			"style": {
+				"navigationBarTitleText": "抢单大厅"
+			}
+		},{
+			"path":"pages/reserve/user/userInfo",
+			"style": {
+				"navigationBarTitleText": "个人信息"
+			}
+		},{
+			"path":"pages/reserve/address/addresss",
+			"style": {
+				"navigationBarTitleText": "地址管理"
+			}
+		},{
+			"path":"pages/reserve/address/addAddress",
+			"style": {
+				"navigationBarTitleText": "新增地址"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarBackgroundColor": "#55aaff",
+		// "navigationBarBackgroundColor": "$default-color",
+		"backgroundColor": "#ffffff"
+	},
+	"tabBar": {
+		"custom": true,
+		"color":"#8F8F94",
+		"selectedColor": "#333333",
+		"borderStyle": "white",
+		"list": [{
+				"pagePath":"pages/reserve/user/home",
+				"text": "首页",
+				"iconPath": "static/tabbar/indexpage.png",
+				"selectedIconPath": "static/tabbar/indexpage_fill.png"
+			},{
+				"pagePath":"pages/reserve/user/order",
+				"text": "订单",
+				"iconPath": "static/tabbar/list.png",
+				"selectedIconPath": "static/tabbar/list-on.png"
+			},{
+				"pagePath":"pages/reserve/user/info",
+				"text": "我的",
+				"iconPath": "static/tabbar/me.png",
+				"selectedIconPath": "static/tabbar/me_fill.png"
+			},{
+				"pagePath":"pages/reserve/carrier/home",
+				"text": "首页",
+				"iconPath": "static/tabbar/indexpage.png",
+				"selectedIconPath": "static/tabbar/indexpage_fill.png"
+			},{
+				"pagePath":"pages/reserve/carrier/order",
+				"text": "订单",
+				"iconPath": "static/tabbar/list.png",
+				"selectedIconPath": "static/tabbar/list-on.png"
+			}
+		]
+	}
+}
