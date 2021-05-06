@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>餐品管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+
+    <style type="text/css">
+        .layui-table-cell {
+            text-align:center;
+            /*height: auto;*/
+            white-space: normal;
+        }
+    </style>
+</head>
+<body>
+
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+    </div>
+</script>
+
+
+<script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+
+<script>
+    layui.use(['table', 'form'], function(){
+        var table = layui.table,
+            $ = layui.jquery,
+            form = layui.form;
+
+        //温馨提示：默认由前端自动合计当前行数据。从 layui 2.5.6 开始： 若接口直接返回了合计行数据，则优先读取接口合计行数据。
+        //详见：https://www.layui.com/doc/modules/table.html#totalRow
+        table.render({
+            elem: '#test'
+            ,url:'/order/listJson?storeId=' + [[${store.storeId}]]
+            ,toolbar: '#toolbarDemo'
+            ,title: '餐品数据表'
+            ,totalRow: true
+            ,cols: [
+                [
+                    {type: 'checkbox', fixed: 'left'}
+                    ,{field:'orderId', title:'ID', width:100, fixed: 'left', sort: true, totalRowText: '合计'}
+                    ,{field:'realName', title:'用户名', width:100, templet:'<div>{{d.address.realName}}</div>'} //地址上的real_name
+                    ,{field:'tel', title:'用户电话', width:100, templet:'<div>{{d.address.tel}}</div>'} //地址上的电话
+                    ,{field:'carrierName', title:'骑手名', width:100, templet:'<div>{{d.carrier.nickname}}</div>'}
+                    ,{field:'carrierTel', title:'骑手电话', width:100, templet:'<div>{{d.carrier.tel}}</div>'} //user表中tel
+                    ,{field:'takeCode', title:'取货码', width:100}
+                    ,{field:'products', title:'餐品列表', width:250}
+                    ,{field:'totalMoney', title:'总金额', width:100, sort: 'true', totalRow: true}
+                    ,{field:'userOrder', title:'当前步骤', width:200, sort: 'true', templet: function (d) {
+                        if(d.getProducts > 0) { //骑手已取货阶段
+                            return " <a class='layui-btn layui-btn-sm' style='background-color: #18fc24'>待送达</a>";
+                        }else if(d.arriveStore > 0) {//骑手已到店阶段
+                            return " <a class='layui-btn layui-btn-sm' style='background-color: #fab810'>待取货</a>";
+                        }else if(d.carrierOrder > 0) {//骑手已接单阶段
+                            return " <a class='layui-btn layui-btn-sm' style='background-color: #c869c7'>待骑手到店</a>";
+                        }else if(d.storeOrder > 0) {//商家已接单阶段
+                            return " <a class='layui-btn layui-btn-sm' style='background-color: #c86432'>待骑手接单</a>";
+                        }else {//商家还未接单
+                            return "<input type='checkbox'  name='storeOrder' orderId='"+d.orderId+"' lay-skin='switch' lay-text='是|否' lay-filter='storeOrderSwitch'>";
+                        }
+                    }}
+                ]
+            ]
+            ,page: true
+            ,limit: 7
+            ,limits: [7,8,9,10]
+        });
+
+        //工具栏事件
+        table.on('toolbar(test)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'getCheckData':
+                    var data = checkStatus.data;
+                    layer.alert(JSON.stringify(data));
+                    break;
+                case 'getCheckLength':
+                    var data = checkStatus.data;
+                    layer.msg('选中了：'+ data.length + ' 个');
+                    break;
+                case 'isAll':
+                    layer.msg(checkStatus.isAll ? '全选': '未全选')
+                    break;
+            };
+        });
+
+        //行双击展示详情
+        table.on('rowDouble(test)', function(obj) {
+            // 展示当前阶段详情
+            parent.layer.open({
+                type: 2,
+                title: '当前阶段',
+                area: ['1000px', '600px'],
+                content: '/order/detail?orderId=' + obj.data.orderId,
+                btn: '关闭',
+                btnAlign: 'c',
+                yes: function(){
+                    parent.layer.closeAll()
+                }
+            })
+        });
+
+        //监听餐品是否上架开关
+        form.on('switch(sellSwitch)', function (data) {
+            var checked = data.elem.checked;
+            var sell;
+            var productId = data.elem.attributes['productId'].nodeValue;
+            if(checked == true) sell = 2;
+            else sell = 1;
+            console.log(productId)
+            console.log(sell);
+
+            $.ajax({
+                type: "post",
+                url: "/product/statusChange",
+                data: JSON.stringify({productId: productId, sell: sell}),
+                contentType : "application/json",
+                dataType: "JSON",
+                success: function(responseData) {
+                    console.log(responseData)
+                    if(responseData.code == 200) {
+                        layer.msg(responseData.message);
+                        //    插入数据失败
+                    }else {
+                        layer.msg("更新信息失败");
+                        // data.elem.checked = !checked;
+                    }
+                }
+            });
+            form.render();
+
+
+        })
+
+    });
+</script>
+
+</body>
+</html>

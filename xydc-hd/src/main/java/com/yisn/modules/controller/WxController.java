@@ -1,8 +1,10 @@
 package com.yisn.modules.controller;
 
 import com.yisn.modules.entity.Address;
+import com.yisn.modules.entity.Order;
 import com.yisn.modules.entity.User;
 import com.yisn.modules.service.AddressService;
+import com.yisn.modules.service.OrderService;
 import com.yisn.modules.service.StoreService;
 import com.yisn.modules.service.UserService;
 import com.yisn.modules.utils.Result;
@@ -29,13 +31,16 @@ public class WxController {
     @Autowired
     private StoreService storeService;
 
+    @Autowired
+    private OrderService orderService;
+
     //    ----------------------------------------用户--------------------------------------------
 
     @GetMapping("/userDetail")
     public Result findUserByUserId(@RequestParam(name = "userId", required = true) int userId) {
         User user = userService.findByUserId(userId);
-        if(user != null || user.getUserId() != 0) {
-            return new Result(Result.OK,"",user);
+        if (user != null || user.getUserId() != 0) {
+            return new Result(Result.OK, "", user);
         }
         return new Result(Result.ERROR, "查找失败");
     }
@@ -43,7 +48,7 @@ public class WxController {
     @PostMapping("/updateUser")
     public Result updateUserByUserId(@RequestBody User user) {
         System.out.println(user);
-        if(user == null || user.getUserId() == 0) {
+        if (user == null || user.getUserId() == 0) {
             return new Result(Result.ERROR, "修改用户失败");
         }
         userService.updateByUserId(user);
@@ -62,6 +67,16 @@ public class WxController {
     @GetMapping("/findStore")
     public Result findStoreWithProduct() {
         List<StoreVO> storeVOList = storeService.findStoreWithProduct();
+//        for(int i = 0; i < storeVOList.get(0).get; ++ i) {
+//            System.out.println();
+//        }
         return new Result(Result.OK, "查找店铺成功", storeVOList);
+    }
+
+    //    ----------------------------------------订单--------------------------------------------
+    @PostMapping("/submitOrder")
+    public Result submitOrder(@RequestBody Order order) {
+        orderService.userAdd(order);
+        return new Result(Result.OK, "支付成功");
     }
 }

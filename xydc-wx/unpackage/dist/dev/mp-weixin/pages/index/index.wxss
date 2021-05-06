@@ -107,8 +107,7 @@
 	  padding: 10% 5%;
 	  background-color: white;
 	  border-radius: 10px;
-	  -webkit-box-shadow: 0 4px 4px #888888;
-	          box-shadow: 0 4px 4px #888888;
+	  box-shadow: 0 4px 4px #888888;
 }
 .login-box>input{
 	  margin: 5% 0 8% 0;

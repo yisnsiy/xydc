@@ -21,7 +21,8 @@ spring:
 #配置mapper配置的路径，天坑，classpath不是属性，而是值
 mybatis:
   mapper-locations: com/yisn/modules/mapper/**/*.xml #mapping/*.xml ,com/yisn/modules/mapper/**/*.xml
-
+  configuration:
+    map-underscore-to-camel-case: true #驼峰转换数据库字段为academy_name 对应实体类的属性为 private String academyName
 file:
   kitchen: /kitchen
   product: /product

@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "餐品详情",
+  "usingComponents": {
+    "qiun-data-charts": "/uni_modules/qiun-data-charts/components/qiun-data-charts/qiun-data-charts"
+  }
+}

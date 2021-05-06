@@ -1,6 +1,6 @@
 <template>
 	<view class="align-center">
-		<view class="padding-xs margin-xs" v-for="item in list " :key="item.addressId" :class="item.def == true ? 'bg-default_color' : 'bg-white'">
+		<view class="padding-xs margin-xs" v-for="item in list " :key="item.addressId" :class="item.def == true ? 'bg-default-color' : 'bg-white'">
 			<view class="align-center flex justify-between">
 				<view class="radius padding-xs" @click="setDefault(item.addressId)"> <!-- 左方块 -->
 					<view class="flex solid-bottom padding-xs align-start align-center"> <!-- 上面那一层 -->
@@ -12,7 +12,6 @@
 				<view class="radius padding-xs margin-lr-xs text-xl" @click="deleteAddress(item.addressId)">
 					<text class="text-red cuIcon-delete"></text>
 				</view>
-				
 			</view>
 		</view>
 		
@@ -33,7 +32,7 @@
 		</view> -->
 
 		<view class="padding flex flex-direction" style="position: fixed; bottom: 5rpx; width: 750rpx;" @click="addAddress()">
-			<button class="cu-btn bg-default_color margin-tb-sm lg round" form-type="submit">添加地址</button>
+			<button class="cu-btn bg-default-color margin-tb-sm lg round" form-type="submit">添加地址</button>
 		</view>
 		
 	</view>
@@ -132,7 +131,7 @@
 </script>
 
 <style lang="scss">
-	.bg-default_color {
+	.bg-default-color {
 		background-color: $default-color;
 		color: #FFFFFF;
 	}

@@ -51,6 +51,21 @@
 			"style": {
 				"navigationBarTitleText": "新增地址"
 			}
+		},{
+			"path":"pages/reserve/store/storeDetail",
+			"style": {
+				"navigationBarTitleText": "店铺详情"
+			}
+		},{
+			"path":"pages/reserve/store/productDetail",
+			"style": {
+				"navigationBarTitleText": "餐品详情"
+			}
+		},{
+			"path":"pages/reserve/store/pay",
+			"style": {
+				"navigationBarTitleText": "结算"
+			}
 		}
 	],
 	"globalStyle": {

@@ -17,10 +17,47 @@
         <result column = "kitchen_picture" property="kitchenPicture" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <resultMap id="xydcReserveStoreVOList" type="com.yisn.modules.vo.StoreVO">
+        <result column = "store_id" property="storeId" jdbcType="INTEGER"/>
+        <result column = "user_id" property="userId" jdbcType="INTEGER"/>
+        <result column = "display" property="display" jdbcType="INTEGER"/>
+        <result column = "auto" property="auto" jdbcType="BIT"/>
+        <result column = "store_name" property="storeName" jdbcType="VARCHAR"/>
+        <result column = "store_tel" property="storeTel" jdbcType="INTEGER"/>
+        <result column = "score" property="score" jdbcType="DOUBLE"/>
+        <result column = "store_address" property="storeAddress" jdbcType="VARCHAR"/>
+        <result column = "store_picture" property="storePicture" jdbcType="VARCHAR"/>
+        <result column = "licenses" property="licenses" jdbcType="VARCHAR"/>
+        <result column = "kitchen_picture" property="kitchenPicture" jdbcType="VARCHAR"/>
+        <collection property="productList" ofType="com.yisn.modules.entity.Product">
+            <result column = "product_id" property="productId" jdbcType="INTEGER"/>
+            <result column = "store_id" property="StoreId" jdbcType="INTEGER"/>
+            <result column = "product_name" property="productName" jdbcType="VARCHAR"/>
+            <result column = "product_picture" property="productPicture" jdbcType="VARCHAR"/>
+            <result column = "product_info" property="productInfo" jdbcType="VARCHAR"/>
+            <result column = "tag" property="tag" jdbcType="VARCHAR"/>
+            <result column = "sell_num" property="sellNum" jdbcType="INTEGER"/>
+            <result column = "sell" property="sell" jdbcType="INTEGER"/>
+            <result column = "carbs" property="carbs" jdbcType="DOUBLE"/>
+            <result column = "calorie" property="calorie" jdbcType="DOUBLE"/>
+            <result column = "fat" property="fat" jdbcType="DOUBLE"/>
+            <result column = "protein" property="protein" jdbcType="DOUBLE"/>
+            <result column = "price" property="price" jdbcType="DOUBLE"/>
+            <result column = "weight" property="weight" jdbcType="DOUBLE"/>
+        </collection>
+    </resultMap>
+
+    <select id="findStoreWithProduct" resultMap="xydcReserveStoreVOList">
+        select *  from t_store s
+        left join t_product p
+        on s.store_id = p.store_id
+        where s.display = 2
+    </select>
+
     <select id="findAllStore" resultMap="xydcReserveStoreList">
         select * from t_store
     </select>
-    
+
     <select id="findByStoreId" resultMap="xydcReserveStoreList">
         select * from t_store
         where store_id = ${storeId}
@@ -65,5 +102,6 @@
           kitchen_picture = #{kitchenPicture}
         where store_id = #{storeId}
     </update>
+
 
 </mapper>

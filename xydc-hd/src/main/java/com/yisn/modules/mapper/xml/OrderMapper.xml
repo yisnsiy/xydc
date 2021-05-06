@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yisn.modules.mapper.OrderMapper">
+
+    <resultMap id="xydcReserveOrderVOList" type="com.yisn.modules.vo.OrderVO">
+        <result column = "order_id" property="orderId"/>
+        <result column = "user_id" property="userId"/>
+        <result column = "carrier_id" property="carrierId"/>
+        <result column = "store_id" property="storeId"/>
+        <result column = "address_id" property="addressId"/>
+        <result column = "take_code" property="takeCode"/>
+        <result column = "products" property="products"/>
+        <result column = "total_money" property="totalMoney"/>
+        <result column = "store_score" property="storeScore"/>
+        <result column = "carrier_score" property="carrierScore"/>
+        <result column = "evaluate_content" property="evaluateContent"/>
+        <result column = "evaluate_picture" property="evaluatePicture"/>
+        <result column = "user_order" property="userOrder"/>
+        <result column = "store_order" property="storeOrder"/>
+        <result column = "carrier_order" property="carrierOrder"/>
+        <result column = "arrive_store" property="arriveStore"/>
+        <result column = "get_products" property="getProducts"/>
+        <result column = "accomplish" property="accomplish"/>
+        <association property="user" javaType="com.yisn.modules.entity.User">
+            <result column = "uid" property="userId"/>
+            <result column = "unickname" property="nickname"/>
+            <result column = "utel" property="tel"/>
+        </association>
+        <association property="carrier" javaType="com.yisn.modules.entity.User">
+            <result column = "cid" property="userId"/>
+            <result column = "cnickname" property="nickname"/>
+            <result column = "ctel" property="tel"/>
+        </association>
+        <association property="store" javaType="com.yisn.modules.entity.Store">
+            <result column = "store_name" property="storeName"/>
+            <result column = "store_tel" property="storeTel"/>
+            <result column = "store_address" property="storeAddress"/>
+        </association>
+        <association property="address" javaType="com.yisn.modules.entity.Address">
+            <result column = "real_name" property="realName"/>
+            <result column = "tel" property="tel"/>
+            <result column = "content" property="content"/>
+        </association>
+    </resultMap>
+
+    <select id="findByStoreId" resultMap="xydcReserveOrderVOList">
+        select
+        o.*,
+        u.user_id uid, u.nickname unickname, u.tel utel,
+        c.user_id cid, c.nickname cnickname, c.tel ctel,
+        s.store_name, s.store_tel, s.store_address,
+        a.real_name, a.tel, a.content
+        from t_order o
+        left join t_user u
+        on o.user_id = u.user_id
+        left join t_user c
+        on o.user_id = c.user_id
+        left join t_store s
+        on o.store_id = s.store_id
+        left join t_address a
+        on o.address_id = a.address_id
+        where o.store_id = #{storeId} and o.accomplish = 0
+        ORDER BY o.store_order ASC, o.user_order ASC
+    </select>
+
+    <insert id="userAdd" parameterType="com.yisn.modules.entity.Order">
+        insert into t_order (order_id, user_id, store_id, address_id, take_code, products, total_money, user_order)
+        values(#{orderId}, #{userId}, #{storeId}, #{addressId}, #{takeCode}, #{products}, #{totalMoney}, #{userOrder})
+    </insert>
+
+    <select id="findByOrderId" resultType="com.yisn.modules.entity.Order">
+        select * from t_order where order_id = #{orderId}
+    </select>
+
+    <!--<select id="getDefaultAddressId" resultType="int">-->
+        <!--select * from t_address where def = 1-->
+    <!--</select>-->
+
+    <!--<delete id="deleteByAddressId">-->
+        <!--delete from t_address where address_id = #{addressId}-->
+    <!--</delete>-->
+
+    <!--<update id="setDefault">-->
+        <!--update t_address set-->
+          <!--def = #{def}-->
+        <!--where address_id = #{addressId}-->
+    <!--</update>-->
+
+    <!--<update id="updateByUsesrId" parameterType="com.yisn.modules.entity.User">-->
+        <!--update t_user set-->
+          <!--password = #{password},-->
+          <!--nickname = #{nickname},-->
+          <!--sex = #{sex},-->
+          <!--identity = #{identity},-->
+          <!--tel = #{tel}-->
+        <!--where user_id = #{userId}-->
+    <!--</update>-->
+
+</mapper>

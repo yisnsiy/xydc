@@ -9,7 +9,10 @@
     "pages/reserve/carrier/info",
     "pages/reserve/user/userInfo",
     "pages/reserve/address/addresss",
-    "pages/reserve/address/addAddress"
+    "pages/reserve/address/addAddress",
+    "pages/reserve/store/storeDetail",
+    "pages/reserve/store/productDetail",
+    "pages/reserve/store/pay"
   ],
   "subPackages": [],
   "window": {
@@ -55,5 +58,6 @@
       }
     ]
   },
-  "usingComponents": {}
+  "usingComponents": {},
+  "sitemapLocation": "sitemap64.json"
 }
