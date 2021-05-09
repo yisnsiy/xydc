@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+
+</head>
+<body>
+
+
+
+    <br>
+    <div id="main" style="width:100%; height:600px;">
+
+    </div>
+<script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+<script th:src="@{/echarts.min.js}"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述 JS 路径需要改成你本地的 -->
+<script type="text/javascript">
+    var mydata = new Array();
+    var mxlen = 15;
+    var x = [], data = [];
+    layui.use('form', function () {
+        $ = layui.jquery;
+
+        $.ajax({
+            type: 'post',
+            url: '/statistic/data',
+            data: JSON.stringify({
+                identity: 2, //看骑手
+                accomplish: -2, //已完成的订单
+                storeScore: -2, //已经评价的订单
+            }),
+            contentType: 'application/json',
+            dataType: 'JSON',
+            success: function(res) {
+                if(res.code == 200) {
+                    for(var index in res.data) {
+                        mydata.push(res.data[index]);
+                    }
+                    mydata.sort(function(a, b){return (b.score/b.num) - (a.score/a.num)}); //a-b就是小的排前面, b-a就是大的排前面
+                    for(var i = 0; i < mydata.length && i < mxlen; ++ i) {
+                        x.push(mydata[i].name);
+                        data.push((mydata[i].score/mydata[i].num).toFixed(2));
+                    }
+                    console.log("sorted data is:", mydata);
+                    console.log("x axis data is:", x);
+                    console.log("data is:", data);
+                    var myChart = echarts.init(document.getElementById('main'));
+                    // 指定图表的配置项和数据
+                    var option = {
+                        title: {
+                            text: '骑手评分'
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                            }
+                        },
+                        legend: {
+                            data:['评分']
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: [],
+                            axisTick: {
+                                alignWithLabel: true
+                            }
+                        },
+                        yAxis: {},
+                        series: [{
+                            name: '评分',
+                            type: 'bar',
+                            itemStyle: {
+                                // barBorderColor: '#55aaff',
+                                color: '#55aaff'
+                            },
+                            data: []
+                        }]
+                    };
+                    // 使用刚指定的配置项和数据显示图表。
+                    option.xAxis.data = x;
+                    option.series[0].data = data;
+                    myChart.setOption(option);
+                }else {
+                    layer.msg("加载数据失败")
+                }
+            }
+        })
+
+    })
+
+</script>
+
+</body>
+</html>

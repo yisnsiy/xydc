@@ -96,7 +96,7 @@ var components
 try {
   components = {
     mytabbar: function() {
-      return __webpack_require__.e(/*! import() | components/mytabbar/mytabbar */ "components/mytabbar/mytabbar").then(__webpack_require__.bind(null, /*! @/components/mytabbar/mytabbar.vue */ 110))
+      return __webpack_require__.e(/*! import() | components/mytabbar/mytabbar */ "components/mytabbar/mytabbar").then(__webpack_require__.bind(null, /*! @/components/mytabbar/mytabbar.vue */ 124))
     }
   }
 } catch (e) {
@@ -153,7 +153,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var mytabbar = function mytabbar() {__webpack_require__.e(/*! require.ensure | components/mytabbar/mytabbar */ "components/mytabbar/mytabbar").then((function () {return resolve(__webpack_require__(/*! @/components/mytabbar/mytabbar.vue */ 110));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var mytabbar = function mytabbar() {__webpack_require__.e(/*! require.ensure | components/mytabbar/mytabbar */ "components/mytabbar/mytabbar").then((function () {return resolve(__webpack_require__(/*! @/components/mytabbar/mytabbar.vue */ 124));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
 
 
 
@@ -208,8 +208,6 @@ __webpack_require__.r(__webpack_exports__);
 
   },
   onLoad: function onLoad() {
-  },
-  onShow: function onShow() {
     try {
       var user = uni.getStorageSync('user');
       this.identity = user.identity;
@@ -217,6 +215,8 @@ __webpack_require__.r(__webpack_exports__);
     } catch (e) {
       console.log(e);
     }
+  },
+  onShow: function onShow() {
   },
   methods: {
     userInfo: function userInfo() {

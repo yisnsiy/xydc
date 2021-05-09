@@ -28,6 +28,9 @@
   background-color: #55aaff;
   color: #FFFFFF;
 }
+.default-color {
+  color: #55aaff;
+}
 .VerticalNav.nav {
   width: 200rpx;
   white-space: initial;

@@ -6,13 +6,14 @@
     "pages/reserve/user/info",
     "pages/reserve/carrier/home",
     "pages/reserve/carrier/order",
-    "pages/reserve/carrier/info",
     "pages/reserve/user/userInfo",
     "pages/reserve/address/addresss",
     "pages/reserve/address/addAddress",
     "pages/reserve/store/storeDetail",
     "pages/reserve/store/productDetail",
-    "pages/reserve/store/pay"
+    "pages/reserve/store/pay",
+    "pages/reserve/order/detail",
+    "pages/reserve/order/evaluate"
   ],
   "subPackages": [],
   "window": {
@@ -58,6 +59,5 @@
       }
     ]
   },
-  "usingComponents": {},
-  "sitemapLocation": "sitemap64.json"
+  "usingComponents": {}
 }

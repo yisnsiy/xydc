@@ -1,5 +1,7 @@
 package com.yisn.modules.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.yisn.modules.entity.Address;
 import com.yisn.modules.mapper.AddressMapper;
 import com.yisn.modules.service.AddressService;
@@ -35,11 +37,35 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public void setDefaultAddress(int nowAddressId) {
-        int preAddressId = addressMapper.getDefaultAddressId();
-        if(preAddressId != nowAddressId) {
-            addressMapper.setDefault(preAddressId, false);
-            addressMapper.setDefault(nowAddressId, true);
+    public void setDefaultAddress(int nowAddressId, int userId) {
+        Integer preAddressId = addressMapper.getDefaultAddressId(userId);
+        Address address = new Address();
+        address.setAddressId(nowAddressId);
+        address.setDef(true);
+        addressMapper.update(address);
+        if(preAddressId != null && preAddressId != nowAddressId) {
+            address.setAddressId(preAddressId);
+            address.setDef(false);
+            addressMapper.update(address);
         }
+    }
+
+    @Override
+    public PageInfo<Address> findPaperByPage(Address condition, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Address> AddressList = addressMapper.find(condition);
+        PageInfo<Address> pageInfo = new PageInfo<>(AddressList);
+        return pageInfo;
+    }
+
+    @Override
+    public Address findSingle(int addressId) {
+        return addressMapper.findSingle(addressId);
+    }
+
+    @Override
+    public void update(Address address) {
+        addressMapper.update(address);
+        return;
     }
 }

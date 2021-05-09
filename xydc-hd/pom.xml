@@ -64,11 +64,18 @@
             <version>1.2.10</version>
         </dependency>
 
-
+        <!--用于判断日期是否是同一天-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.7</version>
+        </dependency>
+
+        <!--将map对象转为entity-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.54</version>
         </dependency>
 
     </dependencies>

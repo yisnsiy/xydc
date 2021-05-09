@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface UserMapper {
-    List<User> findAllUser();
+    List<User> find(User user);
 
     void create(User user);
 

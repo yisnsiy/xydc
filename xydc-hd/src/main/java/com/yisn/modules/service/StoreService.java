@@ -16,7 +16,7 @@ public interface StoreService {
 
     void updata(Store store);
 
-    PageInfo<Store> findPaperByPage(int pageNum, int pageSize);
+    PageInfo<Store> findPaperByPage(Store store, int pageNum, int pageSize);
 
     void displayChangeByStoreId(int storeId, int display);
 
@@ -26,5 +26,5 @@ public interface StoreService {
 
     Store findeByStoreId(int storeId);
 
-    List<StoreVO> findStoreWithProduct();
+    List<StoreVO> findStoreWithProduct(Store store);
 }

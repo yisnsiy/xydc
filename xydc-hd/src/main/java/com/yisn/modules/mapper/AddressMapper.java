@@ -17,8 +17,11 @@ public interface AddressMapper {
 
     void deleteByAddressId(@Param("addressId") int addressId);
 
-    int getDefaultAddressId();
+    Integer getDefaultAddressId(@Param("userId") int userId);
 
-    void setDefault(@Param("addressId") int addressId,
-                    @Param("def") boolean def);
+    List<Address> find(Address condition);
+
+    void update(Address address);
+
+    Address findSingle(@Param("addressId") int addressId);
 }

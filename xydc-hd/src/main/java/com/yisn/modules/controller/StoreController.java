@@ -50,12 +50,13 @@ public class StoreController {
         return "/store/detail";
     }
 
-    @GetMapping("listJson")
+    @RequestMapping("listJson")
     @ResponseBody
     public TableResult getJsonData(@RequestParam(name = "page", defaultValue = "1", required = true) int pageNum,
-                                   @RequestParam(name = "limit", defaultValue = "4", required = true) int pageSize) {
+                                   @RequestParam(name = "limit", defaultValue = "4", required = true) int pageSize,
+                                   Store store) {
         TableResult tableResult = new TableResult();
-        PageInfo<Store> page = storeService.findPaperByPage(pageNum, pageSize);
+        PageInfo<Store> page = storeService.findPaperByPage(store, pageNum, pageSize);
         List<Store> storeList = page.getList();
         tableResult.setCode(0);
         tableResult.setCount(page.getTotal());

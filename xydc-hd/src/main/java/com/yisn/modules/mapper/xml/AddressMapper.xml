@@ -12,9 +12,44 @@
         <result column = "def" property="def" jdbcType="BIT"/>
     </resultMap>
 
-    <!--<select id="findAllUser" resultMap="xydcReserveUserList">-->
-        <!--select * from t_user-->
-    <!--</select>-->
+    <sql id="search">
+        <where>
+            <if test="addressId != 0 and addressId != null and addressId != ''">
+              address_id = #{addressId}
+            </if>
+            <if test="userId != 0 and userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="realName != '' and realName != null">
+                and real_name like '%${realName}%'
+            </if>
+            <if test="tel != 0 and tel != null">
+                and tel = #{tel}
+            </if>
+            <if test="content != '' and content != null">
+                and content like '%${content}%'
+            </if>
+            <if test="def == 1 or def == 2">
+                and def = #{def}
+            </if>
+        </where>
+    </sql>
+
+    <update id="update" parameterType="com.yisn.modules.entity.Address">
+        update t_address
+        <trim prefix="set" suffixOverrides=",">
+            <if test="realName != null and realName != ''">real_name=#{realName},</if>
+            <if test="tel != null and tel != 0 and tel != ''">tel=#{tel},</if>
+            <if test="content != null and content != ''">content=#{content},</if>
+            <if test="def == true or def == false">def=#{def},</if>
+        </trim>
+        where address_id = #{addressId}
+    </update>
+
+    <select id="find" parameterType="com.yisn.modules.entity.Address" resultType="com.yisn.modules.entity.Address">
+        select * from t_address
+        <include refid="search"/>
+    </select>
 
     <insert id="create" parameterType="com.yisn.modules.entity.Address">
         insert into t_address (address_id, user_id, real_name, tel, content, def)
@@ -25,20 +60,17 @@
         select * from t_address where user_id = #{userId}
     </select>
 
-    <select id="getDefaultAddressId" resultType="int">
-        select * from t_address where def = 1
+    <select id="getDefaultAddressId" resultType="Integer">
+        select address_id from t_address where def = 1 and user_id = #{userId}
     </select>
 
     <delete id="deleteByAddressId">
         delete from t_address where address_id = #{addressId}
     </delete>
 
-    <update id="setDefault">
-        update t_address set
-          def = #{def}
-        where address_id = #{addressId}
-    </update>
-
+    <select id="findSingle" resultType="com.yisn.modules.entity.Address">
+        select * from t_address where address_id = #{addressId}
+    </select>
     <!--<update id="updateByUsesrId" parameterType="com.yisn.modules.entity.User">-->
         <!--update t_user set-->
           <!--password = #{password},-->

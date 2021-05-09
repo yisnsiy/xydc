@@ -12,9 +12,19 @@ import java.util.List;
  */
 @Repository
 public interface OrderMapper {
-    void userAdd(Order order);
 
-    List<OrderVO> findByStoreId(@Param("storeId") int storeId);
+    List<OrderVO> findOrderVO(Order condition);
 
     Order findByOrderId(@Param("orderId")int orderId);
+
+    void userAdd(Order order);
+
+    void storeAdd(@Param("orderId") int orderId,
+                  @Param("storeOrder") Long storeOrder);
+
+    int carrierAdd(Order order);
+
+    void update(Order order);
+
+    void delete(@Param("orderId") int orderId);
 }

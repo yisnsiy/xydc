@@ -43,28 +43,27 @@
                         <dd><a href="/user/list" target="content_iFrm">用户管理</a></dd>
                         <dd><a href="/store/list" target="content_iFrm">店铺管理</a></dd>
                         <dd><a th:href="@{'/product/list?userId='+${user.userId}}" target="content_iFrm">餐品管理</a></dd>
-                        <dd><a href="javascript:;">订单管理</a></dd>
-                        <dd><a href="javascript:;">地址管理</a></dd>
+                        <dd><a href="/order/list" target="content_iFrm">订单管理</a></dd>
+                        <dd><a href="/address/list" target="content_iFrm">地址管理</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
                     <a href="javascript:;">数据分析</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">店铺总销量</a></dd>
-                        <dd><a href="javascript:;">店铺总评分</a></dd>
-                        <dd><a href="">餐品销量</a></dd>
-                        <dd><a href="">餐品评分</a></dd>
+                        <dd><a href="/statistic/storeNum" target="content_iFrm">店铺总销量</a></dd>
+                        <dd><a href="/statistic/storeScore" target="content_iFrm">店铺评分</a></dd>
+                        <dd><a href="/statistic/carrierNum" target="content_iFrm">骑手总接单量</a></dd>
+                        <dd><a href="/statistic/carrierScore" target="content_iFrm">骑手评分</a></dd>
+                        <dd><a href="/statistic/productNum?storeId=-2" target="content_iFrm">餐品销量</a></dd>
                     </dl>
                 </li>
-                <li class="layui-nav-item"><a href="javascript:;">消息提示</a></li>
-                <!--<li class="layui-nav-item"><a href="">the links</a></li>-->
             </ul>
         </div>
     </div>
 
     <div class="layui-body">
         <iframe name="content_iFrm" frameborder="no" border="0" class="larry-iframe"
-                style="width: 100%;height: 100%;" th:src="@{'/product/list?userId='+${user.userId}}"></iframe>
+                style="width: 100%;height: 100%;" th:src="@{'/user/list'}"></iframe>
     </div>
 
     <div class="layui-footer">
@@ -80,14 +79,14 @@
             layer = layui.layer,
             $ = layui.jquery;
 
-        var src = "/product/list?userId=" + [[${user.userId}]];
-        $('.larry-iframe').prop('src')
+        var src = "/statistic/storeScore";
+        $('.larry-iframe').attr('src', src);
     });
 
     function personalInfo() {
         layer.open({
             type: 2,
-            title: '创建店铺',
+            title: '个人信息',
             area: ['1000px', '600px'],
             content: '/user/edit?userId='+[[${user.userId}]],
             btn: '关闭',

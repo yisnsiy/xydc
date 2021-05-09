@@ -18,8 +18,6 @@ public interface StoreMapper {
 
     void update(Store store);
 
-    List<Store> findAllStore();
-
     void displayChangeByStoreId(@Param("storeId") int storeId,
                                 @Param("display") int display);
 
@@ -30,5 +28,7 @@ public interface StoreMapper {
 
     Store findByStoreId(@Param("storeId") int storeId);
 
-    List<StoreVO> findStoreWithProduct();
+    List<StoreVO> findStoreWithProduct(Store store);
+
+    List<Store> find(Store store);
 }

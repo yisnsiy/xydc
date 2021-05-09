@@ -1,1 +1,0 @@
-<view><view>骑手个人信息</view><mytabbar vue-id="5a07db55-1" identity="{{2}}" selected="{{2}}" bind:__l="__l"></mytabbar></view>

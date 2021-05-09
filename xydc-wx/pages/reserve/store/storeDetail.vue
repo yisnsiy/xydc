@@ -97,7 +97,14 @@
 		</view>
 		
 		<view v-if="select == 2"> <!-- 评价详情 -->
-			<view>评价详情</view>
+			<view class="bg-white margin-sm padding-sm" style="border-radius: 30rpx;" v-for="(item, index) in evaleateList" :key="index">
+				<view class="flex justify-between text-center" style="width: 100%;">
+					<view class="margin-xs text-xxl default-color">{{item.storeScore==-1?'3':item.storeScore}}</view>
+					<view class="margin-xs">{{item.showAccomplish}}</view>
+				</view>
+				<view class="fl margin-xs text-black" style="width: 100%;">{{item.evaluateContent==null?'这家伙很懒，什么都没留下':item.evaluateContent}}</view>
+				<view  class="margin-xs text-grey" style="width: 100%;">{{item.products}}</view>
+			</view>
 		</view>
 		
 	</view>
@@ -114,12 +121,13 @@
 				storeDetail: '', //这个店铺的所有信息
 				baseUrl: API.baseUrl,
 				deliveryCost: API.deliveryCost, //配送费
-				select: 0, //当前是在那个页面，
+				select: 2, //当前是在那个页面，
 				tagToId: [], // 标签映射到id
 				shoppingCart: [], //购物车
 				refresh: -1, //刷新数量栏的key
 				totalMoney: 0, //总金额
 				total: 0, //买的餐品总数量，用于检测是否买了
+				evaleateList: [], //评价列表
 				
 				list: [],
 				tabCur: 0,
@@ -176,6 +184,26 @@
 			}
 			console.log('list data is :', this.list);
 			this.listCur = this.list[0];
+			
+			// 拿到历史订单信息，加载评价内容
+			uni.request({
+				url: API.baseUrl +  '/order/listJson',
+				data: {
+					storeId: this.storeDetail.storeId,
+					storeScore: -2, //店铺评分大于0的订单
+					accomplish: -2, //同上
+				},
+				success: (res) => {
+					if(res.data.code == 0) {
+						this.evaleateList = res.data.data;
+						console.log('history: ', this.evaleateList);
+						for(var index in this.evaleateList) {
+							this.switchDate(index);
+						}
+					}
+				}
+			});
+			
 		},
 		onReady() {
 			uni.hideLoading()
@@ -228,6 +256,7 @@
 				if(this.total > 0) {
 					uni.setStorageSync("shoppingCart", this.shoppingCart);
 					uni.setStorageSync("storeId", this.storeDetail.storeId);
+					uni.setStorageSync("auto", this.storeDetail.auto);
 					uni.navigateTo({
 						url: '/pages/reserve/store/pay'
 					})
@@ -267,7 +296,15 @@
 						return false
 					}
 				}
-			}
+			},
+			getLocalDate(nS) {
+				if(nS == '' || nS == 0) return '';
+				var mydate = new Date(parseInt(nS));
+				return mydate.getFullYear() + '-' + (mydate.getMonth() + 1) + '-' + mydate.getDate();
+			},
+			switchDate(index) {
+				this.evaleateList[index].showAccomplish = this.getLocalDate(this.evaleateList[index].accomplish);
+			},
 		},
 	}
 	
@@ -277,6 +314,9 @@
 	.bg-default-color {
 		background-color: $default-color;
 		color: #FFFFFF;
+	}
+	.default-color {
+		color: $default-color;
 	}
 	.VerticalNav.nav {
 		width: 200upx;

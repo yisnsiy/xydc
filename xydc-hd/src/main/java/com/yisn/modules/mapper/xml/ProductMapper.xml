@@ -38,26 +38,29 @@
         <result column="store_name" property="storeName" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <select id="findAllProduct" resultMap="xydcReserveProductVOList">
-        select
-          p.product_id product_id,
-          p.store_id store_id,
-          p.product_name product_name,
-          p.product_picture product_picture,
-          p.product_info product_info,
-          p.tag tag,
-          p.sell_num sell_num,
-          p.sell sell,
-          p.carbs carbs,
-          p.calorie calorie,
-          p.fat fat,
-          p.protein protein,
-          p.price price,
-          p.weight weight,
-          s.store_name store_name
-        from t_product as p
-        left join t_store as s
+    <sql id="search">
+        <where>
+            <if test="storeId != 0 and storeId != null and storeId > 0">
+                p.store_id = #{storeId}
+            </if>
+            <if test="storeName != null and storeName != ''">
+                s.store_name like '%${storeName}%'
+            </if>
+            <if test="productName != null and productName != ''">
+                and p.product_name like '%${productName}%'
+            </if>
+            <if test="productInfo != '' and productInfo != null">
+                and p.product_info like '%${productInfo}%'
+            </if>
+        </where>
+    </sql>
+
+    <select id="find" parameterType="com.yisn.modules.vo.ProductVO" resultMap="xydcReserveProductVOList">
+        select p.*, s.store_name
+        from t_product p
+        left join t_store s
         on p.store_id = s.store_id
+        <include refid="search"/>
     </select>
 
     <insert id="create" parameterType="com.yisn.modules.entity.Product">
@@ -65,10 +68,10 @@
         values(#{productId},#{StoreId}, #{productName},#{productPicture},#{productInfo},#{tag},#{sellNum},#{sell},#{carbs},#{calorie},#{fat},#{protein},#{price},#{weight})
     </insert>
 
-    <select id="findByStoreId" resultMap="xydcReserveProductList">
-        select * from t_product
-        where store_id = #{storeId}
-    </select>
+    <!--<select id="findByStoreId" resultMap="xydcReserveProductList">-->
+        <!--select * from t_product-->
+        <!--where store_id = #{storeId}-->
+    <!--</select>-->
 
     <select id="findByProductId" resultMap="xydcReserveProductList">
         select * from t_product
@@ -99,6 +102,12 @@
           protein = #{protein},
           price = #{price},
           weight = #{weight}
+        where product_id = #{productId}
+    </update>
+
+    <update id="addSellNum">
+        update t_product set
+          sell_num = sell_num + #{cnt}
         where product_id = #{productId}
     </update>
 

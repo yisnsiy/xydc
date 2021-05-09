@@ -17,10 +17,10 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public PageInfo<User> findPaperByPage(int pageNum, int pageSize) {
+    public PageInfo<User> findPaperByPage(User user, int pageNum, int pageSize) {
 //        设置第几页，每页显示的数量
         PageHelper.startPage(pageNum, pageSize);
-        List<User> userList = userMapper.findAllUser();
+        List<User> userList = userMapper.find(user);
         PageInfo<User> pageInfo = new PageInfo<>(userList);
         return pageInfo;
     }

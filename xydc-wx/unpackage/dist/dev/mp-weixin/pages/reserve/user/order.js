@@ -96,7 +96,7 @@ var components
 try {
   components = {
     mytabbar: function() {
-      return __webpack_require__.e(/*! import() | components/mytabbar/mytabbar */ "components/mytabbar/mytabbar").then(__webpack_require__.bind(null, /*! @/components/mytabbar/mytabbar.vue */ 110))
+      return __webpack_require__.e(/*! import() | components/mytabbar/mytabbar */ "components/mytabbar/mytabbar").then(__webpack_require__.bind(null, /*! @/components/mytabbar/mytabbar.vue */ 124))
     }
   }
 } catch (e) {
@@ -153,7 +153,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var mytabbar = function mytabbar() {__webpack_require__.e(/*! require.ensure | components/mytabbar/mytabbar */ "components/mytabbar/mytabbar").then((function () {return resolve(__webpack_require__(/*! @/components/mytabbar/mytabbar.vue */ 110));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
 
 
 
@@ -183,31 +183,164 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
-{
-  components: {
-    mytabbar: mytabbar },
 
-  data: function data() {
-    return {
-      select: 0,
-      basicsList: [{ cuIcon: 'usefullfill', name: '下单' },
-      { cuIcon: 'radioboxfill', name: '店家已接单' },
-      { cuIcon: 'roundclosefill', name: '已取货' },
-      { cuIcon: 'roundcheckfill', name: '已完成' }],
 
-      basics: 0 };
 
-  },
-  methods: {
-    switchOne: function switchOne() {
-      this.select = 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var _api = _interopRequireDefault(__webpack_require__(/*! @/util/api.js */ 17));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var mytabbar = function mytabbar() {__webpack_require__.e(/*! require.ensure | components/mytabbar/mytabbar */ "components/mytabbar/mytabbar").then((function () {return resolve(__webpack_require__(/*! @/components/mytabbar/mytabbar.vue */ 124));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default = { components: { mytabbar: mytabbar }, data: function data() {return { select: 0, currentOrder: [], historyOrder: [], user: '' };}, onLoad: function onLoad() {var _this = this;var user = uni.getStorageSync("user");this.user = user; // 加载当前正在进行的订单的数据
+    this.pulldata(); // 加载已完成的订单的数据
+    uni.request({ url: _api.default.baseUrl + '/order/listJson', data: { userId: this.user.userId, accomplish: -2 //同上
+      }, success: function success(res) {if (res.data.code == 0) {_this.historyOrder = res.data.data;console.log('history: ', _this.historyOrder);for (var index in _this.historyOrder) {_this.switchDate(2, index);}}} });}, onPullDownRefresh: function onPullDownRefresh() {// 下拉刷新正在进行的订单的数据
+    this.pulldata();}, onShow: function onShow() {}, methods: { switchOne: function switchOne() {this.select = 0;}, switchTwo: function switchTwo() {this.select = 1;}, getLocalTime: function getLocalTime(nS) {if (nS == '' || nS == 0) return '';var mydate = new Date(parseInt(nS));return mydate.getHours() + ':' + mydate.getMinutes() + ':' + mydate.getSeconds();}, getLocalDate: function getLocalDate(nS) {if (nS == '' || nS == 0) return '';var mydate = new Date(parseInt(nS));return mydate.getFullYear() + '-' + (mydate.getMonth() + 1) + '-' + mydate.getDate();}, switchDate: function switchDate(flag, index) {if (flag == 1) {this.currentOrder[index].showCarrierOrder = this.getLocalTime(this.currentOrder[index].carrierOrder);this.currentOrder[index].showArriveStore = this.getLocalTime(this.currentOrder[index].arriveStore);this.currentOrder[index].showGetProducts = this.getLocalTime(this.currentOrder[index].getProducts);this.currentOrder[index].showAccomplish = this.getLocalTime(this.currentOrder[index].accomplish);} else if (flag == 2) {this.historyOrder[index].showCarrierOrder = this.getLocalTime(this.historyOrder[index].carrierOrder);this.historyOrder[index].showArriveStoreOrder = this.getLocalTime(this.historyOrder[index].arriveStore);this.historyOrder[index].showGetProducts = this.getLocalTime(this.historyOrder[index].getProducts);this.historyOrder[index].showAccomplish = this.getLocalDate(this.historyOrder[index].accomplish) + ' ' + this.getLocalTime(this.historyOrder[index].accomplish);}}, orderDetail: function orderDetail(order) {uni.setStorageSync("order", order);uni.navigateTo({ url: '/pages/reserve/order/detail' });console.log(order);}, evaluate: function evaluate(orderId) {uni.navigateTo({ url: '/pages/reserve/order/evaluate?orderId=' + orderId });
     },
-    switchTwo: function switchTwo() {
-      this.select = 1;
-    },
-    BasicsSteps: function BasicsSteps() {
-      this.basics = this.basics == this.basicsList.length - 1 ? 0 : this.basics + 1;
+    pulldata: function pulldata() {var _this2 = this;
+      uni.request({
+        url: _api.default.baseUrl + '/order/listJson',
+        data: {
+          userId: this.user.userId,
+          accomplish: -1 //同上
+        },
+        success: function success(res) {
+          if (res.data.code == 0) {
+            _this2.currentOrder = res.data.data;
+            console.log('current:', _this2.currentOrder);
+            for (var index in _this2.currentOrder) {
+              _this2.switchDate(1, index);
+            }
+          }
+        } });
+
     } } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 

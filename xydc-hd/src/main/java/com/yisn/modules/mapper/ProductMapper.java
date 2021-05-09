@@ -14,7 +14,7 @@ import java.util.List;
 public interface ProductMapper {
     void create(Product product);
 
-    List<Product> findByStoreId(@Param("storeId") int storeId);
+//    List<Product> findByStoreId(@Param("storeId") int storeId);
 
     Product findByProductId(@Param("productId") int productId);
 
@@ -25,5 +25,8 @@ public interface ProductMapper {
 
     void deleteByProductId(@Param("productId") int productId);
 
-    List<ProductVO> findAllProduct();
+    List<ProductVO> find(ProductVO productVO);
+
+    void addSellNum(@Param("productId")int productId,
+                    @Param("cnt")int cnt);
 }

@@ -1,5 +1,6 @@
 {
   "navigationBarTitleText": "抢单大厅",
+  "enablePullDownRefresh": true,
   "usingComponents": {
     "mytabbar": "/components/mytabbar/mytabbar"
   }

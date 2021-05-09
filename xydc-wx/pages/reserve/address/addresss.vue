@@ -104,10 +104,12 @@
 					content: "是否确认将点击的地址设置为默认地址",
 					success(res) {
 						if(res.confirm) {
+							let user = uni.getStorageSync("user");
 							uni.request({
 								url: API.baseUrl + '/address/setDefaultAddress',
 								data: {
 									addressId: addressId,
+									userId: user.userId,
 								},
 								success(res) {
 									if(res.data.code == 200) { //设置成功就重新加载该页面，以刷新页面

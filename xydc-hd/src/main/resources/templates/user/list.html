@@ -11,6 +11,32 @@
 </head>
 <body>
 
+<br>
+<form class="layui-form" action="" lay-filter="example">
+    <div class="layui-row">
+        <div class="layui-col-md10">
+            <div class="layui-inline">
+                <label class="layui-form-label">昵称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="nickname" id="snickname" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">电话</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="tel" id="stel" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md2">
+            <div class="layui-inline">
+                    <button type="button" onclick="doSearch();" class="layui-btn">Search</button>
+                    <button type="reset" class="layui-btn">Reset</button>
+            </div>
+        </div>
+    </div>
+</form>
+
 <table class="layui-hide" id="test" lay-filter="test"></table>
 
 <script type="text/html" id="toolbarDemo">
@@ -31,9 +57,10 @@
 <!-- 注意：如果你直接复制所有代码到本地，上述 JS 路径需要改成你本地的 -->
 
 <script>
+    var table, $;
     layui.use('table', function(){
-        var table = layui.table;
-        var $ = layui.jquery;
+        table = layui.table;
+        $ = layui.jquery;
 
         //温馨提示：默认由前端自动合计当前行数据。从 layui 2.5.6 开始： 若接口直接返回了合计行数据，则优先读取接口合计行数据。
         //详见：https://www.layui.com/doc/modules/table.html#totalRow
@@ -50,12 +77,19 @@
                     ,{field:'password', title:'密码', width:150}
                     ,{field:'nickname', title:'昵称', width:150}
                     ,{field:'tel', title:'电话', width:170, sort: 'true'}
-                    ,{field:'sex', title:'性别', width:150, sort: 'true'}
-                    ,{field:'identity', title:'身份', width:150, sort: 'true'}
+                    ,{field:'sex', title:'性别', width:150, sort: 'true', templet:'<div>{{d.sex == 0?"男":"女"}}</div>'}
+                    ,{field:'identity', title:'身份', width:150, sort: 'true', templet:function(d) {
+                        if(d.identity == 0) return '管理员';
+                        else if(d.identity == 1) return '用户';
+                        else if(d.identity == 2) return '骑手';
+                        else if(d.identity == 3) return '店主';
+                        else return "";
+                    }}
                     ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:200}
                 ]
             ]
             ,page: true
+            ,id:'userTable'
         });
 
         //工具栏事件
@@ -150,7 +184,24 @@
             }
         });
 
+
     });
+    function doSearch() {
+        var nickname = $('#snickname').val();
+        var tel = $('#stel').val();
+        console.log('nickname is:',nickname)
+        console.log('tel is:', tel);
+        table.reload('userTable', {
+            where: {
+                nickname: nickname,
+                tel: tel
+            }
+            ,page: {
+                curr: 1
+            }
+        });
+    }
+
 </script>
 
 </body>

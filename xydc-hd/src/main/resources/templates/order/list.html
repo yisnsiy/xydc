@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>餐品管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+
+    <style type="text/css">
+        .layui-table-cell {
+            text-align:center;
+            /*height: auto;*/
+            white-space: normal;
+        }
+    </style>
+</head>
+<body>
+
+<br>
+<form class="layui-form" action="" lay-filter="example">
+    <div class="layui-row">
+        <div class="layui-col-md10">
+            <div class="layui-inline">
+                <label class="layui-form-label">评价</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="evaluateContent" id="sevaluateContent" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">餐品</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="products" id="sproducts" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md2">
+            <div class="layui-inline">
+                <button type="button" onclick="doSearch();" class="layui-btn">Search</button>
+                <button type="reset" class="layui-btn">Reset</button>
+            </div>
+        </div>
+    </div>
+</form>
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+    </div>
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+
+<script>
+    var table, $;
+    layui.use(['table', 'form'], function(){
+        table = layui.table;
+        $ = layui.jquery;
+        var form = layui.form;
+
+        //温馨提示：默认由前端自动合计当前行数据。从 layui 2.5.6 开始： 若接口直接返回了合计行数据，则优先读取接口合计行数据。
+        //详见：https://www.layui.com/doc/modules/table.html#totalRow
+        table.render({
+            elem: '#test'
+            ,url:'/order/listJson'
+            ,toolbar: '#toolbarDemo'
+            ,title: '餐品数据表'
+            ,totalRow: true
+            ,cols: [
+                [
+                    {type: 'checkbox', fixed: 'left'}
+                    ,{field:'orderId', title:'ID', width:70, fixed: 'left', sort: true, totalRowText: '合计'}
+                    ,{field:'realName', title:'用户名', width:80, templet:'<div>{{d.address.realName}}</div>'} //地址上的real_name
+                    ,{field:'tel', title:'用户电话', width:90, templet:'<div>{{d.address.tel}}</div>'} //地址上的电话
+                    ,{field:'carrierName', title:'骑手名', width:80, templet: function (d) { //user表中的nickname
+                        if(d.carrier != null && d.carrier.nickname != null) {
+                            return d.carrier.nickname;
+                        }
+                        else
+                            return '';
+                    }}
+                    ,{field:'carrierTel', title:'骑手电话', width:90, templet: function (d) { //user表中的tel
+                        if(d.carrier != null && d.carrier.tel != null)
+                            return d.carrier.tel
+                        else
+                            return '';
+                    }}
+                    ,{field:'takeCode', title:'取货码', width:70}
+                    ,{field:'products', title:'餐品列表', width:190}
+                    ,{field:'totalMoney', title:'总金额', width:80, sort: 'true', totalRow: true}
+                    ,{field:'storeScore', title:'店铺评分', width:50, sort: 'true', templet:'<div>{{d.storeScore == -1?0:d.storeScore}}</div>'}
+                    ,{field:'carrierScore', title:'骑手评分', width:50, sort: 'true', templet:'<div>{{d.carrierScore == -1?0:d.carrierScore}}</div>'}
+                    ,{field:'evaluateContent', title:'店铺评语', width:200,}
+                    ,{field:'userOrder', title:'当前步骤', width:140, sort: 'true', templet: function (d) {
+                        if(d.accomplish > 0) { //已完成阶段
+                            var mydate = new Date(parseInt(d.accomplish));
+                            return mydate.getFullYear() + '-' + (mydate.getMonth() + 1) + '-' + mydate.getDate() + ' ' + mydate.getHours() + ':' + mydate.getMinutes() + ':' + mydate.getSeconds();
+                        }else if(d.getProducts > 0) { //骑手已取货阶段
+                            return " <a class='layui-btn layui-btn-sm' style='background-color: #18fc24'>待送达</a>";
+                        }else if(d.arriveStore > 0) {//骑手已到店阶段
+                            return " <a class='layui-btn layui-btn-sm' style='background-color: #fab810'>待取货</a>";
+                        }else if(d.carrierOrder > 0) {//骑手已接单阶段
+                            return " <a class='layui-btn layui-btn-sm' style='background-color: #c869c7'>待骑手到店</a>";
+                        }else if(d.storeOrder > 0) {//商家已接单阶段
+                            return " <a class='layui-btn layui-btn-sm' style='background-color: #c86432'>待骑手接单</a>";
+                        }else {//商家还未接单
+                            return " <a class='layui-btn layui-btn-sm' style='background-color: #faf10f'>待店铺接单</a>";
+                        }
+                    }}
+                    ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:80}
+                ]
+            ]
+            ,page: true
+            ,limit: 10
+            ,limits: [10,12,15,20]
+            ,id: 'orderTable'
+        });
+
+        //工具栏事件
+        table.on('toolbar(test)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'getCheckData':
+                    var data = checkStatus.data;
+                    layer.alert(JSON.stringify(data));
+                    break;
+                case 'getCheckLength':
+                    var data = checkStatus.data;
+                    layer.msg('选中了：'+ data.length + ' 个');
+                    break;
+                case 'isAll':
+                    layer.msg(checkStatus.isAll ? '全选': '未全选')
+                    break;
+            };
+        });
+
+        //工具条事件
+        table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var orderId = obj.data.orderId; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+
+            if(layEvent === 'del'){ //删除
+                layer.confirm('真的删除吗', function(index){
+                    $.ajax({
+                        type: "get",
+                        url: "/order/delete?orderId="+orderId,
+                        dataType: "JSON",
+                        success: function(responseData) {
+                            if(responseData.code == 200) {
+                                layer.alert(responseData.message, {yes: function() {
+                                        obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                                        layer.closeAll();
+                                    }});
+                            }else {
+                                layer.alert("删除订单失败");
+                            }
+                        }
+                    })
+                });
+            }
+        });
+
+
+        //行双击展示详情
+        table.on('rowDouble(test)', function(obj) {
+            // 展示当前阶段详情
+            parent.layer.open({
+                type: 2,
+                title: '当前阶段',
+                area: ['1000px', '600px'],
+                content: '/order/detail?orderId=' + obj.data.orderId,
+                btn: '关闭',
+                btnAlign: 'c',
+                yes: function(){
+                    parent.layer.closeAll()
+                }
+            })
+        });
+
+        //监听接单开关
+        form.on('switch(storeOrderSwitch)', function (data) {
+            var checked = data.elem.checked;
+            var orderId = data.elem.attributes['orderId'].nodeValue;
+            if(checked == true) {
+                var storeOrder = new Date().getTime();
+                console.log(orderId);
+                console.log(storeOrder);
+            }
+            $.ajax({
+                type: "post",
+                url: "/order/storeAcceptOrder",
+                data: JSON.stringify({orderId: orderId, storeOrder: storeOrder}),
+                contentType : "application/json",
+                dataType: "JSON",
+                success: function(responseData) {
+                    console.log(responseData)
+                    if(responseData.code == 200) {
+                        layer.msg(responseData.message);
+                        table.reload('test');
+                    }else {
+                        layer.msg("更新信息失败");
+                        // data.elem.checked = !checked;
+                    }
+                }
+            });
+            // form.render();
+
+
+        })
+
+    });
+
+    function doSearch() {
+        table.reload('orderTable', {
+            where: {
+                evaluateContent: $('#sevaluateContent').val(),
+                products: $('#sproducts').val()
+            }
+            ,page: {
+                curr: 1
+            }
+        });
+    }
+
+</script>
+
+</body>
+</html>

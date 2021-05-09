@@ -52,9 +52,10 @@ public class UserController {
     @RequestMapping("/listJson")
     @ResponseBody
     public TableResult getJsonData(@RequestParam(name = "page", defaultValue = "1", required = false) int pageNum,
-                                         @RequestParam(name = "limit", defaultValue = "7", required = false) int pageSize) {
+                                   @RequestParam(name = "limit", defaultValue = "7", required = false) int pageSize,
+                                   User user) {
         TableResult tableResult = new TableResult();
-        PageInfo<User> page = userService.findPaperByPage(pageNum, pageSize);
+        PageInfo<User> page = userService.findPaperByPage(user, pageNum, pageSize);
         List<User> userList = page.getList();
         tableResult.setCode(0);
         tableResult.setCount(page.getTotal());

@@ -16,7 +16,7 @@
 				</view>
 				
 			</view>
-			<view class="cu-item" @click="addressManage()">
+			<view class="cu-item" @click="addressManage()" v-if="identity == 1">
 				<view class="content">
 					<text class="cuIcon-location text-grey">
 						
@@ -53,8 +53,6 @@
 			};
 		},
 		onLoad() {
-		},
-		onShow(){
 			try{
 				var user = uni.getStorageSync('user');
 				this.identity = user.identity;
@@ -62,6 +60,8 @@
 			} catch(e) {
 				console.log(e);
 			}
+		},
+		onShow(){
 		},
 		methods: {
 			userInfo() {

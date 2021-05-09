@@ -14,7 +14,8 @@
 		},{
 			"path":"pages/reserve/user/order",
 			"style": {
-				"navigationBarTitleText": "订单"
+				"navigationBarTitleText": "订单",
+				"enablePullDownRefresh": true
 			}
 		},{
 			"path":"pages/reserve/user/info",
@@ -24,17 +25,14 @@
 		},{
 			"path":"pages/reserve/carrier/home",
 			"style": {
-				"navigationBarTitleText": "抢单大厅"
+				"navigationBarTitleText": "抢单大厅",
+				"enablePullDownRefresh": true
 			}
 		},{
 			"path":"pages/reserve/carrier/order",
 			"style": {
-				"navigationBarTitleText": "订单"
-			}
-		},{
-			"path":"pages/reserve/carrier/info",
-			"style": {
-				"navigationBarTitleText": "抢单大厅"
+				"navigationBarTitleText": "订单",
+				"enablePullDownRefresh": true
 			}
 		},{
 			"path":"pages/reserve/user/userInfo",
@@ -65,6 +63,16 @@
 			"path":"pages/reserve/store/pay",
 			"style": {
 				"navigationBarTitleText": "结算"
+			}
+		},{
+			"path":"pages/reserve/order/detail",
+			"style": {
+				"navigationBarTitleText": "订单详情"
+			}
+		},{
+			"path":"pages/reserve/order/evaluate",
+			"style": {
+				"navigationBarTitleText": "餐品评价"
 			}
 		}
 	],

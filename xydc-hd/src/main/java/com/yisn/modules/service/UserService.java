@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.yisn.modules.entity.User;
 
 public interface UserService {
-    PageInfo<User> findPaperByPage(int pageNum, int pageSize);
+    PageInfo<User> findPaperByPage(User user, int pageNum, int pageSize);
 
     void create(User user);
 

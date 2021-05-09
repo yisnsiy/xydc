@@ -148,7 +148,6 @@
 			// 加载购物车里面的所有数据
 			let shoppingCart = uni.getStorageSync("shoppingCart");
 			let pos = 0;
-			console.log('shopping cart is :', shoppingCart);
 			for(let index in shoppingCart) {
 				if(shoppingCart[index] != null && shoppingCart[index].cnt > 0) {
 					this.shoppingCart[pos ++] = shoppingCart[index];
@@ -156,7 +155,7 @@
 					this.totalMoney += shoppingCart[index].product.price * shoppingCart[index].cnt;
 				}
 			}
-			console.log(this.shoppingCart);
+			console.log('shopping cart is :', this.shoppingCart);
 			
 			
 			// 获取所有的地址
@@ -192,7 +191,6 @@
 			for(let i = 0; i < 4; ++ i) {
 				this.chartData.series[0].data[i] = this.chartData.series[0].data[i].toFixed(2);
 			}
-			// console.log(this.chartData.series[0].data);
 			
 		},
 		onShow() {
@@ -225,7 +223,13 @@
 				        if (res.confirm) {
 							let user = uni.getStorageSync("user");
 							let storeId = uni.getStorageSync("storeId");
+							let auto = uni.getStorageSync("auto");
+							console.log(auto);
 							let products = "";
+							let storeOrder = 0;
+							if(auto == true) {
+								storeOrder = this.currentTime;
+							}
 							for(let index in this.shoppingCart) {
 								products = products + this.shoppingCart[index].product.productName + "x" + this.shoppingCart[index].cnt + ';';
 							}
@@ -239,15 +243,23 @@
 									totalMoney: this.totalMoney,
 									products: products,
 									userOrder: this.currentTime,
+									storeOrder: storeOrder,
 									addressId: this.selectAddress.addressId,
 								},
 								success: res=> {
+									uni.showToast({
+										title: res.data.message,
+										duration: 1 * 1000,
+										position: 'center',
+										icon: 'none'
+									})
 									if(res.data.code == 200) {
-										console.log(res.data.message);
-										uni.navigateBack()
+										// 给餐品增加次数
+										for(let index in this.shoppingCart) {
+											this.addSellNum(this.shoppingCart[index].product.productId, this.shoppingCart[index].cnt);
+										}
 									}
 								}
-								
 							})
 				        } else if (res.cancel) {
 				            console.log('用户点击取消');
@@ -263,6 +275,17 @@
 			},
 			toJSON() {
 				return this;
+			},
+			addSellNum(id, cnt) {
+				console.log(id, cnt);
+				uni.request({
+					url: API.baseUrl + '/wx/addSellNum',
+					method: 'POST',
+					data: {
+						productId: id,
+						cnt: cnt,
+					}
+				})
 			}
 		}
 	}

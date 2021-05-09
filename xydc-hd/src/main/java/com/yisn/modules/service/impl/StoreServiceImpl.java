@@ -38,9 +38,9 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public PageInfo<Store> findPaperByPage(int pageNum, int pageSize) {
+    public PageInfo<Store> findPaperByPage(Store store, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<Store> storeList = storeMapper.findAllStore();
+        List<Store> storeList = storeMapper.find(store);
         PageInfo<Store> pageInfo = new PageInfo<>(storeList);
         return pageInfo;
     }
@@ -67,8 +67,8 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public List<StoreVO> findStoreWithProduct() {
-        List<StoreVO> storeVOList = storeMapper.findStoreWithProduct();
+    public List<StoreVO> findStoreWithProduct(Store store) {
+        List<StoreVO> storeVOList = storeMapper.findStoreWithProduct(store);
         return storeVOList;
     }
 }

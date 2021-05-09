@@ -11,9 +11,20 @@
         <result column = "identity" property="identity" jdbcType="INTEGER"/>
         <result column = "tel" property="tel" jdbcType="INTEGER"/>
     </resultMap>
+    <sql id="search">
+        <where>
+            <if test="nickname != null and nickname != ''">
+                nickname like '%${nickname}%'
+            </if>
+            <if test="tel != 0 and tel != null">
+                and tel like '%${tel}%'
+            </if>
+        </where>
+    </sql>
 
-    <select id="findAllUser" resultMap="xydcReserveUserList">
+    <select id="find" parameterType="com.yisn.modules.entity.User" resultType="com.yisn.modules.entity.User">
         select * from t_user
+        <include refid="search"/>
     </select>
 
     <insert id="create" parameterType="com.yisn.modules.entity.User">

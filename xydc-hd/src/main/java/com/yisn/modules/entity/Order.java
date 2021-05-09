@@ -22,7 +22,6 @@ public class Order {
     private Double storeScore;
     private Double carrierScore;
     private String evaluateContent;
-    private String evaluatePicture;
     private long userOrder;
     private long storeOrder;
     private long carrierOrder;

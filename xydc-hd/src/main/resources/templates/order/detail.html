@@ -16,46 +16,83 @@
 <body>
 
 
-
-<ul class="layui-timeline">
-    <li class="layui-timeline-item">
-        <i class="layui-icon layui-timeline-axis"></i>
-        <div class="layui-timeline-content layui-text">
-            <div class="layui-timeline-title">2018年，layui 5.0 发布。并发展成为中国最受欢迎的前端UI框架（期望）</div>
-        </div>
-    </li>
-    <li class="layui-timeline-item">
-        <i class="layui-icon layui-timeline-axis"></i>
-        <div class="layui-timeline-content layui-text">
-            <div class="layui-timeline-title">2017年，layui 里程碑版本 2.0 发布</div>
-        </div>
-    </li>
-    <li class="layui-timeline-item">
-        <i class="layui-icon layui-timeline-axis"></i>
-        <div class="layui-timeline-content layui-text">
-            <div class="layui-timeline-title">2016年，layui 首个版本发布</div>
-        </div>
-    </li>
-    <li class="layui-timeline-item">
-        <i class="layui-icon layui-timeline-axis"></i>
-        <div class="layui-timeline-content layui-text">
-            <div class="layui-timeline-title">2015年，layui 孵化</div>
-        </div>
-    </li>
-    <li class="layui-timeline-item">
-        <i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop layui-timeline-axis"></i>
-        <div class="layui-timeline-content layui-text">
-            <div class="layui-timeline-title">更久前，轮子时代。维护几个独立组件：layer等</div>
-        </div>
-    </li>
-</ul>
+<div style="width: 600px; position: relative; left:40%;">
+    <br>
+    <ul class="layui-timeline">
+        <li class="layui-timeline-item" th:style="${order.accomplish} ==  0?'display: none':''">
+            <i class="layui-icon layui-timeline-axis"></i>
+            <div class="layui-timeline-content layui-text">
+                <div class="layui-timeline-title" id="accomplish"></div>
+            </div>
+        </li>
+        <li class="layui-timeline-item" th:style="${order.getProducts} ==  0?'display: none':''">
+            <i class="layui-icon layui-timeline-axis"></i>
+            <div class="layui-timeline-content layui-text">
+                <div class="layui-timeline-title" id="getProducts"></div>
+            </div>
+        </li>
+        <li class="layui-timeline-item" th:style="${order.arriveStore} ==  0?'display: none':''">
+            <i class="layui-icon layui-timeline-axis"></i>
+            <div class="layui-timeline-content layui-text">
+                <div class="layui-timeline-title" id="arriveStore"></div>
+            </div>
+        </li>
+        <li class="layui-timeline-item" th:style="${order.carrierOrder} ==  0?'display: none':''">
+            <i class="layui-icon layui-timeline-axis"></i>
+            <div class="layui-timeline-content layui-text">
+                <div class="layui-timeline-title" id="carrierOrder"></div>
+            </div>
+        </li>
+        <li class="layui-timeline-item" th:style="${order.storeOrder} ==  0?'display: none':''">
+            <i class="layui-icon layui-timeline-axis"></i>
+            <div class="layui-timeline-content layui-text">
+                <div class="layui-timeline-title" id="storeOrder"></div>
+            </div>
+        </li>
+        <li class="layui-timeline-item">
+            <i class="layui-icon layui-timeline-axis"></i>
+            <div class="layui-timeline-content layui-text">
+                <div class="layui-timeline-title" id="userOrder"></div>
+            </div>
+        </li>
+    </ul>
+</div>
 <script th:src="@{/layui/layui.js}" charset="utf-8"></script>
 <!-- 注意：如果你直接复制所有代码到本地，上述 JS 路径需要改成你本地的 -->
 <script>
-    layui.use(['form', 'upload'], function(){
+    layui.use(['form', 'upload'], function() {
         var form = layui.form,
             $ = layui.jquery;
+
+        function getLocalTime(nS) {
+            var mydate = new Date(parseInt(nS));
+            return (mydate.getMonth() + 1) + '-' + mydate.getDate() + ' ' + mydate.getHours() + ':' + mydate.getMinutes() + ':' + mydate.getSeconds();
+        }
+
+        var datestr = getLocalTime([[${order.userOrder}]]);
+        $('#userOrder').text(datestr + ' 用户下单');
+        if ([[${order.storeOrder}]] > 0) {
+            datestr = getLocalTime([[${order.storeOrder}]]) ;
+            $('#storeOrder').text(datestr + ' 店铺接单');
+        }
+        if([[${order.carrierOrder}]] > 0) {
+            datestr = getLocalTime([[${order.carrierOrder}]]);
+            $('#carrierOrder').text(datestr + ' 骑手接单');
+        }
+        if([[${order.arriveStore}]] > 0) {
+            datestr = getLocalTime([[${order.arriveStore}]]);
+            $('#arriveStore').text(datestr + ' 骑手到店');
+        }
+        if([[${order.getProducts}]] > 0) {
+            datestr = getLocalTime([[${order.getProducts}]]);
+            $('#getProducts').text(datestr + ' 骑手取货');
+        }
+        if([[${order.accomplish}]] > 0) {
+            datestr = getLocalTime([[${order.accomplish}]]);
+            $('#accomplish').text(datestr + ' 完成订单');
+        }
     });
+
 </script>
 
 </body>

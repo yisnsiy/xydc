@@ -42,7 +42,7 @@
         //详见：https://www.layui.com/doc/modules/table.html#totalRow
         table.render({
             elem: '#test'
-            ,url:'/order/listJson?storeId=' + [[${store.storeId}]]
+            ,url:'/order/listJson?storeId=' + [[${store.storeId}]] + '&accomplish=-1'
             ,toolbar: '#toolbarDemo'
             ,title: '餐品数据表'
             ,totalRow: true
@@ -52,8 +52,18 @@
                     ,{field:'orderId', title:'ID', width:100, fixed: 'left', sort: true, totalRowText: '合计'}
                     ,{field:'realName', title:'用户名', width:100, templet:'<div>{{d.address.realName}}</div>'} //地址上的real_name
                     ,{field:'tel', title:'用户电话', width:100, templet:'<div>{{d.address.tel}}</div>'} //地址上的电话
-                    ,{field:'carrierName', title:'骑手名', width:100, templet:'<div>{{d.carrier.nickname}}</div>'}
-                    ,{field:'carrierTel', title:'骑手电话', width:100, templet:'<div>{{d.carrier.tel}}</div>'} //user表中tel
+                    ,{field:'carrierName', title:'骑手名', width:100, templet: function (d) { //user表中的nickname
+                        if(d.carrier != null && d.carrier.nickname != null)
+                            return d.carrier.nickname;
+                        else
+                            return '';
+                    }}
+                    ,{field:'carrierTel', title:'骑手电话', width:100, templet: function (d) { //user表中的tel
+                        if(d.carrier != null && d.carrier.tel != null)
+                            return d.carrier.tel;
+                        else
+                            return '';
+                    }}
                     ,{field:'takeCode', title:'取货码', width:100}
                     ,{field:'products', title:'餐品列表', width:250}
                     ,{field:'totalMoney', title:'总金额', width:100, sort: 'true', totalRow: true}
@@ -111,34 +121,33 @@
             })
         });
 
-        //监听餐品是否上架开关
-        form.on('switch(sellSwitch)', function (data) {
+        //监听接单开关
+        form.on('switch(storeOrderSwitch)', function (data) {
             var checked = data.elem.checked;
-            var sell;
-            var productId = data.elem.attributes['productId'].nodeValue;
-            if(checked == true) sell = 2;
-            else sell = 1;
-            console.log(productId)
-            console.log(sell);
-
+            var orderId = data.elem.attributes['orderId'].nodeValue;
+            if(checked == true) {
+                var storeOrder = new Date().getTime();
+                console.log(orderId);
+                console.log(storeOrder);
+            }
             $.ajax({
                 type: "post",
-                url: "/product/statusChange",
-                data: JSON.stringify({productId: productId, sell: sell}),
+                url: "/order/storeAcceptOrder",
+                data: JSON.stringify({orderId: orderId, storeOrder: storeOrder}),
                 contentType : "application/json",
                 dataType: "JSON",
                 success: function(responseData) {
                     console.log(responseData)
                     if(responseData.code == 200) {
                         layer.msg(responseData.message);
-                        //    插入数据失败
+                        table.reload('test');
                     }else {
                         layer.msg("更新信息失败");
                         // data.elem.checked = !checked;
                     }
                 }
             });
-            form.render();
+            // form.render();
 
 
         })

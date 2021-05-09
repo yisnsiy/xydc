@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+
+
+
+<br>
+<div style="width: 600px; position: relative; left:30%;">
+    <form class="layui-form" action="" lay-filter="example">
+        <div class="layui-form-item">
+            <label class="layui-form-label">收件名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="realName" th:value="${address.realName}" lay-verify="required" autocomplete="off" placeholder="请输入用户名" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">电话</label>
+            <div class="layui-input-inline">
+                <input type="text" name="tel" th:value="${address.tel}" lay-verify="required|number" placeholder="请输入密码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">地址</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="content" th:value="${address.content}" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" name="def" th:value="${address.def}">
+        <input type="hidden" name="addressId" th:value="${address.addressId}">
+        <input type="hidden" name="userId" th:value="${address.userId}">
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">更新信息</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述 JS 路径需要改成你本地的 -->
+<script th:inline="javascript">
+    layui.use('form', function(){
+        var form = layui.form;
+        var $ = layui.jquery;
+
+
+        // 监听提交
+        form.on('submit(demo1)', function(data){
+            console.log(JSON.stringify(data.field))
+            // $.post("/user/create", JSON.stringify(data.field), function(){
+            //
+            // })
+            $.ajax({
+                type: "post",
+                url: "/address/update",
+                data: JSON.stringify(data.field),
+                contentType : "application/json",
+                dataType: "JSON",
+                success: function(responseData) {
+                    console.log(responseData)
+                    if(responseData.code == 200) {
+                        //    插入数据成功
+                        layer.alert(responseData.message,{yes: function (){
+                                parent.layer.closeAll();
+                            }});
+                    }else {
+                        //    插入数据失败
+                        layer.alert("创建用户失败");
+                    }
+                }
+            })
+            return false;
+        });
+    });
+</script>
+
+</body>
+</html>

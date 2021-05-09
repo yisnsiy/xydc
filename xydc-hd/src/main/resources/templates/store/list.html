@@ -20,6 +20,31 @@
 </head>
 <body>
 
+<br>
+<form class="layui-form" action="" lay-filter="example">
+    <div class="layui-row">
+        <div class="layui-col-md10">
+            <div class="layui-inline">
+                <label class="layui-form-label">店铺名</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="storeName" id="sstoreName" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">地址</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="storeAddress" id="sstoreAddress" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md2">
+            <div class="layui-inline">
+                <button type="button" onclick="doSearch();" class="layui-btn">Search</button>
+                <button type="reset" class="layui-btn">Reset</button>
+            </div>
+        </div>
+    </div>
+</form>
 <table class="layui-hide" id="test" lay-filter="test"></table>
 
 <script type="text/html" id="toolbarDemo">
@@ -43,11 +68,13 @@
 <script id="autoSwitch" type="text/html">
     <input type="checkbox"  name="auto" storeId="{{d.storeId}}" lay-skin="switch" lay-text="是|否" lay-filter="autoSwitch" {{ d.auto == true ?'checked' : '' }}>
 </script>
+
 <script>
+    var table, $;
     layui.use(['table', 'form'], function(){
-        var table = layui.table,
-            $ = layui.jquery,
-            form = layui.form;
+        table = layui.table;
+        $ = layui.jquery;
+        var form = layui.form;
 
         //温馨提示：默认由前端自动合计当前行数据。从 layui 2.5.6 开始： 若接口直接返回了合计行数据，则优先读取接口合计行数据。
         //详见：https://www.layui.com/doc/modules/table.html#totalRow
@@ -60,14 +87,14 @@
             ,cols: [
                 [
                     {type: 'checkbox', fixed: 'left'}
-                    ,{field:'storeId', title:'店铺ID', width:80, fixed: 'left', sort: true}
-                    ,{field:'userId', title:'所属用户ID', width: 80}
+                    ,{field:'storeId', title:'店铺ID', width:90, fixed: 'left', sort: true}
+                    ,{field:'userId', title:'所属用户ID', width: 90}
                     ,{field:'display', title:'是否允许营业', width:110, templet: "#displaySwitch"}
                     ,{field:'auto', title:'是否自动接单', width:110, templet: "#autoSwitch"}
                     ,{field:'storeName', title:'店铺名', width:90}
                     ,{field:'storeTel', title:'电话号码', width:90}
                     ,{field:'storeAddress', title:'店铺地址', width:90}
-                    ,{field:'score', title:'店铺得分', width:80}
+                    ,{field:'score', title:'店铺得分', width:90}
                     ,{field:'storePicture', title:'店铺头像', width:120, templet:'<div><img src="{{d.storePicture}}"></div>'}
                     ,{field:'licenses', title:'许可证', width:120, templet:'<div><img src="{{d.licenses}}" ></div>'}
                     ,{field:'kitchenPicture', title:'厨房', width:120, templet:'<div><img src="{{d.kitchenPicture}}" ></div>'}
@@ -77,6 +104,7 @@
             ,page: true
             ,limit: 4
             ,limits: [4,5,6,7]
+            ,id:'storeTable'
         });
 
         //工具栏事件
@@ -214,6 +242,19 @@
         })
 
     });
+
+    function doSearch() {
+        table.reload('storeTable', {
+            where: {
+                storeName: $('#sstoreName').val(),
+                storeAddress: $('#sstoreAddress').val()
+            }
+            ,page: {
+                curr: 1
+            }
+        });
+    }
+
 </script>
 
 </body>

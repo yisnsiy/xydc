@@ -51,7 +51,6 @@
 		onLoad() {
 		},
 		onShow() {
-			console.log(2);
 			this.getStore();
 		},
 		methods: {
@@ -63,8 +62,10 @@
 			},
 			search() {
 				console.log('for search this content is : ',this.searchContent);
+				uni.setStorageSync("storeRefreshTime", 0);
+				this.getStore(this.searchContent);
 			},
-			getStore() {
+			getStore(searchContent) {
 				var nowTime = (new Date()).getTime();
 				var preStoreRefreshTime = uni.getStorageSync("storeRefreshTime");
 				console.log(preStoreRefreshTime)
@@ -76,6 +77,9 @@
 					console.log('get data from database');
 					uni.request({
 						url: API.baseUrl + '/wx/findStore',
+						data: {
+							storeName: searchContent || ''
+						},
 						success:res=> {
 							console.log("store\'s content is :", res.data.data);
 							if(res.data.code == 200) {

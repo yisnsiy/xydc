@@ -13,5 +13,5 @@ public class User {
     private String nickname;
     private int sex;
     private int identity;
-    private int tel;
+    private Integer tel;
 }

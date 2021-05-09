@@ -96,7 +96,7 @@ var components
 try {
   components = {
     mytabbar: function() {
-      return __webpack_require__.e(/*! import() | components/mytabbar/mytabbar */ "components/mytabbar/mytabbar").then(__webpack_require__.bind(null, /*! @/components/mytabbar/mytabbar.vue */ 110))
+      return __webpack_require__.e(/*! import() | components/mytabbar/mytabbar */ "components/mytabbar/mytabbar").then(__webpack_require__.bind(null, /*! @/components/mytabbar/mytabbar.vue */ 124))
     }
   }
 } catch (e) {
@@ -188,7 +188,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _api = _interopRequireDefault(__webpack_require__(/*! @/util/api.js */ 17));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var mytabbar = function mytabbar() {__webpack_require__.e(/*! require.ensure | components/mytabbar/mytabbar */ "components/mytabbar/mytabbar").then((function () {return resolve(__webpack_require__(/*! @/components/mytabbar/mytabbar.vue */ 110));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
+var _api = _interopRequireDefault(__webpack_require__(/*! @/util/api.js */ 17));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var mytabbar = function mytabbar() {__webpack_require__.e(/*! require.ensure | components/mytabbar/mytabbar */ "components/mytabbar/mytabbar").then((function () {return resolve(__webpack_require__(/*! @/components/mytabbar/mytabbar.vue */ 124));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
 
 {
   components: {
@@ -206,7 +206,6 @@ var _api = _interopRequireDefault(__webpack_require__(/*! @/util/api.js */ 17));
   onLoad: function onLoad() {
   },
   onShow: function onShow() {
-    console.log(2);
     this.getStore();
   },
   methods: {
@@ -218,8 +217,10 @@ var _api = _interopRequireDefault(__webpack_require__(/*! @/util/api.js */ 17));
     },
     search: function search() {
       console.log('for search this content is : ', this.searchContent);
+      uni.setStorageSync("storeRefreshTime", 0);
+      this.getStore(this.searchContent);
     },
-    getStore: function getStore() {var _this = this;
+    getStore: function getStore(searchContent) {var _this = this;
       var nowTime = new Date().getTime();
       var preStoreRefreshTime = uni.getStorageSync("storeRefreshTime");
       console.log(preStoreRefreshTime);
@@ -231,6 +232,9 @@ var _api = _interopRequireDefault(__webpack_require__(/*! @/util/api.js */ 17));
         console.log('get data from database');
         uni.request({
           url: _api.default.baseUrl + '/wx/findStore',
+          data: {
+            storeName: searchContent || '' },
+
           success: function success(res) {
             console.log("store\'s content is :", res.data.data);
             if (res.data.code == 200) {

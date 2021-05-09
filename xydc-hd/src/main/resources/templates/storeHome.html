@@ -44,8 +44,7 @@
                 <li class="layui-nav-item">
                     <a href="javascript:;">数据分析</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">餐品销量</a></dd>
-                        <dd><a href="javascript:;">餐品评分</a></dd>
+                        <dd><a class="f4" target="content_iFrm">餐品销量</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
@@ -55,8 +54,6 @@
                         <dd><a class="f3" target="content_iFrm">历史订单</a></dd>
                     </dl>
                 </li>
-                <li class="layui-nav-item"><a href="javascript:;">消息提示</a></li>
-                <!--<li class="layui-nav-item"><a href="">the links</a></li>-->
             </ul>
         </div>
     </div>
@@ -88,9 +85,16 @@
             $('.f1').attr('href', src);
 
             //订单管理的链接
-            src = "/order/list?userId=" + [[${user.userId}]];
+            src = "/order/currentList?userId=" + [[${user.userId}]];
             $('.f2').attr('href', src);
-            $('.larry-iframe').attr('src', src);// 调试用
+            // $('.larry-iframe').attr('src', src);// 调试用
+
+            src = "/order/historyList?userId=" + [[${user.userId}]];
+            $('.f3').attr('href', src);
+            // $('.larry-iframe').attr('src', src);// 调试用
+
+            src = "/statistic/productNum?storeId=" + [[${store.storeId}]];
+            $('.f4').attr('href', src);
 
         }else {
             $('#alert').prop('text', '请先在右上角填写店铺信息！！！');
