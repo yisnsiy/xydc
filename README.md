@@ -1,5 +1,9 @@
 
 
+# 校园订餐系统
+
+[TOC]
+
 # 1. 介绍
 
 ## 1.1 系统介绍
@@ -16,10 +20,11 @@ web端：Layui
 
 # 2. 功能模块图
 
-![功能模块图](E:\Code\xydc\screenshots\functional_module.png)
+![功能模块图](./screenshots/functional_module.png)
 
 # 3. 项目目录结构
 
+```
 xydc
 ├── README.md	//自述文件
 ├── screenshots	//项目运行截图
@@ -44,42 +49,43 @@ xydc
     ├── uni_modules
     ├── unpackage
     └── util
+```
 
 # 4.项目部分运行截图
 
 ## 1.管理员/店主登录
 
-![管理员/店主登录](https://github.com/yisnsiy/xydc/screenshots/web_login.png)
+![管理员/店主登录](./screenshots/web_login.png)
 
 ## 2.用户/骑手登录
 
-![用户/骑手登录](https://github.com/yisnsiy/xydc/screenshots/wx_login.jpg)
+![用户/骑手登录](./screenshots/wx_login.jpg)
 
 ## 3.管理员主页
 
-![管理员主页](https://github.com/yisnsiy/xydc/screenshots/admin_home.png)
+![管理员主页](./screenshots/admin_home.png)
 
 ## 4.店主主页
 
-![店主](https://github.com/yisnsiy/xydc/screenshots/store_home.png)
+![店主](./screenshots/store_home.png)
 
 ## 5.微信小程序店铺列表
 
-![微信小程序店铺列表](https://github.com/yisnsiy/xydc/screenshots/store_list.jpg)
+![微信小程序店铺列表](./screenshots/store_list.jpg)
 
 ## 6.店铺详情
 
-![店铺详情](https://github.com/yisnsiy/xydc/screenshots/store_detail.jpg)
+![店铺详情](./screenshots/store_detail.jpg)
 
 ## 7.店铺评价
 
-![店铺评价](https://github.com/yisnsiy/xydc/screenshots/store_evaluate.jpg)
+![店铺评价](./screenshots/store_evaluate.jpg)
 
 ## 8.结账
 
-![结账](https://github.com/yisnsiy/xydc/screenshots/buy.jpg)
+![结账](./screenshots/buy.jpg)
 
 ## 9.骑手配送
 
-![骑手配送](https://github.com/yisnsiy/xydc/screenshots/delivery.jpg)
+![骑手配送](./screenshots/delivery.jpg)
 
