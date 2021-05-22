@@ -175,7 +175,7 @@ var _default = { components: {}, data: function data() {return { userId: '', pas
         success: function success(res) {
           uni.showToast({
             title: res.data.message,
-            duration: 0.5 * 1000,
+            duration: 1.5 * 1000,
             position: 'center',
             icon: 'none' });
 

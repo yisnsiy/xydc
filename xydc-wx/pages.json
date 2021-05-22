@@ -9,7 +9,7 @@
 		{
 			"path":"pages/reserve/user/home",
 			"style": {
-				"navigationBarTitleText": "商品展示"
+				"navigationBarTitleText": "店铺展示"
 			}
 		},{
 			"path":"pages/reserve/user/order",

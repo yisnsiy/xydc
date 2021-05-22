@@ -1,6 +1,6 @@
 // const baseUrl = 'http://117.173.223.66:8080' //本机外网
 
-const baseUrl = 'http://192.168.0.104:8080' //局域网
+const baseUrl = 'http://192.168.0.109:8080' //局域网
 
 // const baseUrl = 'http://127.0.0.1:8080'
 

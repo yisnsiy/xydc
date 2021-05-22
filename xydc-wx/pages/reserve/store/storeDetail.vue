@@ -68,7 +68,7 @@
 							<text class="lg cuIcon-recharge">{{totalMoney}}</text>
 							<!-- <view>99</view> -->
 						</view>
-						<view class="align-end text-xs">已加配送费{{deliveryCost}}元</view>
+						<view class="align-end text-xs" v-if="total>0">已加配送费{{deliveryCost}}元</view>
 					</view>
 					<view class="cu-btn bg-default-color margin-tb-xs lg round" @click="buy()">结账</view>
 				</view>
